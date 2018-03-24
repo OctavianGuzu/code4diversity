@@ -1,7 +1,8 @@
+var map, infoWindow;
 function initMap() {
 
         // Latlng for map center
-        var myLatlng = new google.maps.LatLng(44.4267674, 26.102538399999958);
+        var myLatlng = new google.maps.LatLng(44.4267674, 28.102538399999958);
 
         var mapOptions = {
             zoom: 6,
@@ -61,7 +62,28 @@ function initMap() {
         };
 
         var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        console.log("Map init");
+        infoWindow = new google.maps.InfoWindow;
 
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found.');
+                infoWindow.open(map);
+                map.setCenter(pos);
+            }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+            });
+        } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+        }
         /*var beaches = [
             ['Universitate', -33.890542, 151.274856, 4],
             ['HighSchool', -33.923036, 151.259052, 5],
@@ -130,3 +152,10 @@ function initMap() {
         // marker2.setMap(map2);
 
     }
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+    infoWindow.setPosition(pos);
+    infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+    infoWindow.open(map);
+}
