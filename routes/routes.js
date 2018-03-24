@@ -106,6 +106,7 @@ router.get('/logout', function (req, res, next) {
 })
 
 router.get('/getEntities', function (req, res, next) {
+	console.log("here");
 	Entity.find({}).exec(function (err, result) {
 		res.json(result);
 	})
@@ -130,6 +131,13 @@ router.get('/addEvent', function (req, res, next) {
 		console.log(err);
 		res.json(response);
 	})
+})
+
+router.get('/getUserName', function (req, res, next) {
+	User.findById(req.session.userId)
+		.exec(function (err, user) {
+			res.json(user.name);
+		})
 })
 
 router.get('/addEntity', function (req, res, next) {
