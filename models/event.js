@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var util = require('routes/util/recomandation');
+var util = require('../routes/util/recomandation');
 
 var EventSchema = new mongoose.Schema({
     entityId: {

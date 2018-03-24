@@ -1,8 +1,8 @@
 /**
  * Created by constantin.andreescu on 3/24/2018.
  */
-var UserProfile = require('../models/userProfile');
-var Event = require('../models/event');
+var UserProfile = require('../../models/userProfile.js');
+var Event = require('../../models/event.js');
 
 function compareByUserScore(a,b) {
     return a.userScore > b.userScore

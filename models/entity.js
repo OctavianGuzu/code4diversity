@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var util = require('routes/util/recomandation');
+var util = require('../routes/util/recomandation');
 
 var EntitySchema = new mongoose.Schema({
     location: {

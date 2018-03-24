@@ -9,7 +9,7 @@ function initMap() {
         var mapOptions = {
             zoom: 6,
             center: myLatlng,
-            scrollwheel: false, //we disable de scroll over the map, it is a really annoing when you scroll through page
+            scrollwheel: true, //we disable de scroll over the map, it is a really annoing when you scroll through page
             styles: [{
                 "featureType": "water",
                 "elementType": "geometry",
