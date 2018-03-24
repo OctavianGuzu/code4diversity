@@ -24,7 +24,7 @@
     <div class="card card-login mx-auto mt-5">
       <div class="card-header">Login</div>
       <div class="card-body">
-        <form action="/" method="post">
+        <form>
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
             <input class="form-control" id="InputEmail" type="email" aria-describedby="emailHelp" placeholder="Enter email" name="logemail">
@@ -40,11 +40,10 @@
                 <input class="form-check-input" type="checkbox"> Remember Password</label>
             </div>
           </div>
-          <button id="LoginBtn" type="submit" class="btn btn-primary btn-block">Login</button>
+          <button id="LoginBtn" class="btn btn-primary btn-block">Login</button>
         </form>
         <div class="text-center">
           <a id="registerAcc" class="d-block small mt-3" href="#">Register an Account</a>
-          <a id="forgotPass" class="d-block small" href="#">Forgot Password?</a>
           <p class="text-danger" ng-show="invalid_user">Invalid email address or password!</p>
         </div>
       </div>

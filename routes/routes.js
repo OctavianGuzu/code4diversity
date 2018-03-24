@@ -8,17 +8,26 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-	if (req.body.logemail && req.body.logpassword) {
-		User.authenticate(req.body.logemail, req.body.logpassword, function (error, user) {
+	var obj;
+	for(key in req.body)
+		obj = JSON.parse(key);
+	var response = {
+		err: false
+	};
+
+	if (obj.logemail && obj.logpassword) {
+		
+		User.authenticate(obj.logemail, obj.logpassword, function (error, user) {
 			if (error || !user) {
-				var err = new Error('Wrong email or password.');
-		        err.status = 401;
-		        return next(err);
+		        response.err = true;
+		        res.status(200).send(response);
 			} else {
 				req.session.userId = user._id;
-				return res.redirect('index');
+				res.status(200).send(response);
 			}
 		})
+	} else {
+		res.status(200).send(null);
 	}
 })
 
@@ -27,34 +36,42 @@ router.get('/register', function (req, res, next) {
 });	
 
 router.post('/register', function (req, res, next) {
-	if (req.body.password !== req.body.passwordConf) {
-		var err = new Error('Passwords do not match.');
-	    err.status = 400;
-	    res.send("passwords dont match");
-	    return next(err);
+	var obj;
+	for(key in req.body)
+		obj = JSON.parse(key);
+	var response = {
+		err: false
+	};
+	if (obj.password !== obj.passwordConf) {
+		response.err = true;
+		res.status(200).send(response);
+		return;
 	}
 
-	if (req.body.email &&
-		req.body.name &&
-		req.body.password &&
-		req.body.passwordConf) {
-		console.log("here");
+	if (obj.email &&
+		obj.name &&
+		obj.password &&
+		obj.passwordConf) {
 		var userData = {
-			email: req.body.email,
-			name: req.body.name,
-			password: req.body.password,
+			email: obj.email,
+			name: obj.name,
+			password: obj.password,
 			administrator: false
 		}
 
 		User.create(userData, function (err, user) {
 			if (err) {
 				console.log(err);
-				return next(err);
+				response.err = true;
+				res.status(200).send(response);
 			} else {
 				req.session.userId = user._id;
-				return res.redirect('index');
+				res.status(200).send(response);
 			}
 		})
+	} else {
+		response.err = true;
+		res.status(200).send(response);
 	}
 })
 
