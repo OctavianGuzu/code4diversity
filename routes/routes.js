@@ -90,4 +90,17 @@ router.get('/index', function (req, res, next) {
 		})
 })
 
+router.get('/logout', function (req, res, next) {
+	console.log("here");
+	if (req.session) {
+		req.session.destroy(function (err) {
+			if (err) {
+				res.status(200).send(null);
+			} else {
+				res.redirect('/');
+			}
+		})
+	}
+})
+
 module.exports = router;
