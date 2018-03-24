@@ -86,3 +86,5 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 	}
 
 }]);
+
+dash.controller("dashboardController", ["$scope", "$http",function( $scope, $http ) {}]);
