@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
-var Request = require('../models/request');
+var Entity = require('../models/entity');
 var https = require('https');
 
 // GET route for reading data
