@@ -87,4 +87,39 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 
 }]);
 
-dash.controller("dashboardController", ["$scope", "$http",function( $scope, $http ) {}]);
+dash.controller("dashboardController", ["$scope", "$http", function( $scope, $http ) {
+    $('#EntityInsertBtn').click(function (e) {
+        $scope.insertSucc = false;
+        $scope.insertFail = false;
+
+        var name = $('#NameEnt').val();
+        var location = $('#LocationEnt').val();
+        var type = $('#typePicker').val();
+        var address = $('#AddressEnt').val();
+        var description = $('#DescriptionEnt').val();
+        var imageLink = $('#ImageEnt').val();
+        var femPer = $('#FemaleEnt').val();
+
+        if (name != "" && location != "" && type != "" &&
+            address != "" && description != "") {
+
+            var url = "/addEntity?name=" + name +
+                    "&location=" + location +
+                    "&type=" + type +
+                    "&address=" + address +
+                    "&description=" + description +
+                    "&imagelink=" + imageLink +
+                    "&femper=" + femPer;
+            $http.get(url)
+                .then(function (response) {
+                    console.log("here");
+                    $scope.insertSucc = true;
+                    $scope.insertFail = false;
+                });         
+        } else {
+            $scope.$apply(function () {
+                $scope.insertFail = true;
+            })
+        }
+    })
+}]);

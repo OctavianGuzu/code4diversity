@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
+var Request = require('../models/request');
+var https = require('https');
 
 // GET route for reading data
 router.get('/', function (req, res, next) {
@@ -61,7 +63,6 @@ router.post('/register', function (req, res, next) {
 
 		User.create(userData, function (err, user) {
 			if (err) {
-				console.log(err);
 				response.err = true;
 				res.status(200).send(response);
 			} else {
@@ -102,5 +103,43 @@ router.get('/logout', function (req, res, next) {
 		})
 	}
 })
+
+router.get('/addEntity', function (req, res, next) {
+	var response = {
+		status_code : 0,
+        status_message : "success",
+        data : false
+	};
+	var obj = {
+		location: req.query.location,
+		name: req.query.name,
+		long: null,
+		lat: null,
+		femaleProc: req.query.femper,
+		imageUrl: req.query.imagelink,
+		address: req.query.address,
+		description: req.query.description,
+		//TODO
+	}
+	var where = "https://maps.googleapis.com/maps/api/geocode/json?address=" + req.query.address + "&key=AIzaSyAoJWKTh1B_Hh7CuMVoGnEy3b58F9axNuY"
+	https.get(where, (resp) => {
+	  let data = '';
+	 
+	  // A chunk of data has been recieved.
+	  resp.on('data', (chunk) => {
+	    data += chunk;
+	  });
+	 
+	  // The whole response has been received. Print out the result.
+	  resp.on('end', () => {
+	    console.log(JSON.parse(data));
+	    res.json(response);
+	    //TODO insert in DB
+	  });
+	 
+	}).on("error", (err) => {
+	  console.log("Error: " + err.message);
+	});
+});
 
 module.exports = router;

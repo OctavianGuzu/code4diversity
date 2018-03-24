@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>My Crew</title>
+  <title>RoboMap</title>
   <link href="css/sb-admin.css" rel="stylesheet">
   <!-- Bootstrap core CSS-->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -38,13 +38,13 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EntityModal">
             <i class="fa fa-fw fa-map-pin"></i>
             <span class="nav-link-text">Add entity</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EventModal">
             <i class="fa fa-fw fa-calendar-plus-o"></i>
             <span class="nav-link-text">Add event</span>
           </a>
@@ -202,46 +202,96 @@
     </div>
   </div>
 
-    <div class="modal fade" id="TaskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="EntityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add new task</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Add new entity</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="exampleInputEmail1">Task name</label>
-              <input class="form-control" id="InputNameTask" type="text" aria-describedby="Name" placeholder="Enter task name">
+              <label for="exampleInputEmail1">Name</label>
+              <input class="form-control" id="NameEnt" type="text" aria-describedby="Name" placeholder="Enter entity name">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Assignee</label>
-              <input class="form-control" id="InputAssigneeTask" type="text" aria-describedby="Name" placeholder="Enter assignee">
+              <label for="exampleInputEmail1">Location</label>
+              <input class="form-control" id="LocationEnt" type="text" aria-describedby="Name" placeholder="Enter location">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Assigner</label>
-              <input class="form-control" id="InputAssignerTask" type="text" aria-describedby="Name" placeholder="Enter assigner">
+              <label for="exampleInputEmail1">Entity's type:   </label>
+             <!--  <input class="form-control" id="TypeEnt" type="text" aria-describedby="Name" placeholder="Enter entity's type"> -->
+             <select class="selectpicker" id="typePicker">
+              <option>Highschool</option>
+              <option>University</option>
+              <option>Public club</option>
+              <option>Private club</option>
+              <option>Private Company</option>
+            </select>
+
+
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Due date</label>
-              <input class="form-control" id="InputDdateTask" type="text" aria-describedby="Name" placeholder="Enter due date">
+              <label for="exampleInputEmail1">Address</label>
+              <input class="form-control" id="AddressEnt" type="text" aria-describedby="Name" placeholder="Enter address">
             </div>
             <div class="form-group">
               <label for="exampleInputEmail1">Description</label>
-              <input class="form-control" id="InputDescriptionTask" type="text" aria-describedby="Name" placeholder="Enter description">
+              <input class="form-control" id="DescriptionEnt" type="text" aria-describedby="Name" placeholder="Enter description">
             </div>
             <div class="form-group">
-              <label for="exampleInputEmail1">Priority: low, medium, high</label>
-              <input class="form-control" id="PrioritynTask" type="text" aria-describedby="Name" placeholder="Enter priority">
+              <label for="exampleInputEmail1">Image link (optional)</label>
+              <input class="form-control" id="ImageEnt" type="text" aria-describedby="Name" placeholder="Enter image link">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Female percentage (optional)</label>
+              <input class="form-control" id="FemaleEnt" type="text" aria-describedby="Name" placeholder="Enter female percentage">
             </div>
           </div>
           <div class="modal-footer">
-            <p class="text-success" ng-show="insertSucc">Successfully added new task!</p>
+            <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
             <p class="text-danger" ng-show="insertFail">Don't leave fields empty!</p>
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button id="TaskInsertBtn" type="button" class="btn btn-primary">Done</button>
+            <button id="EntityInsertBtn" type="button" class="btn btn-primary">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="EventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add new event</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Name</label>
+              <input class="form-control" id="NameEvent" type="text" aria-describedby="Name" placeholder="Enter event's name">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Location:  </label>
+              <!-- <input class="form-control" id="LocationEvent" type="text" aria-describedby="Name" placeholder="Enter entity name"> -->
+              <select class="selectpicker">
+                <option>Entity1</option>
+                <option>Entity2</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <input class="form-control" id="TypeEnt" type="text" aria-describedby="Name" placeholder="Enter description">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <p class="text-success" ng-show="insertSucc2">Successfully added new event!</p>
+            <p class="text-danger" ng-show="insertFail2">Don't leave fields empty!</p>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <button id="EventInsertBtn" type="button" class="btn btn-primary">Done</button>
           </div>
         </div>
       </div>
@@ -276,7 +326,6 @@
     <script src="js/map.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJWKTh1B_Hh7CuMVoGnEy3b58F9axNuY&callback=initMap"
       async defer></script>
-
 
 
 
