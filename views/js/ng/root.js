@@ -4,7 +4,7 @@ var globalUserName = "";
 
 root.controller("loginController", ["$scope", "$http",function( $scope, $http ) {
 	$scope.invalid_user = false;
-
+    console.log("here");
 	$('#LoginBtn').click(function (e) {
 		var email = $('#InputEmail').val();
 		var pass = $('#InputPassword').val();
