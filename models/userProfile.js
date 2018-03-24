@@ -35,6 +35,18 @@ var UserProfileSchema = new mongoose.Schema({
 });
 
 /**
+ * Find user characteristics by user id
+ * @param userId
+ * @param callback
+ */
+UserProfileSchema.statics.getUserProfile = function (userId, callback) {
+    UserProfile.findOne({ id: userId })
+        .exec (function (err, userProfile) {
+            callback(null, userProfile);
+        });
+};
+
+/**
  * Normalizes the factors on the 5 preferences dimensions before persisting
  */
 UserProfileSchema.pre('save', function (next) {
