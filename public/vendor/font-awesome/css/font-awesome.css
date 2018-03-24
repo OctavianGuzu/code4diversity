@@ -2335,3 +2335,13 @@
   overflow: visible;
   clip: auto;
 }
+.gm-style .gm-style-iw {
+  width: 350px !important;
+  top: 0 !important;
+  left: 0 !important;
+  background-color: #BC3131;
+  box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
+  border: 1px solid rgba(72, 181, 233, 0.6);
+  border-radius: 2px 2px 0 0;
+}
+
