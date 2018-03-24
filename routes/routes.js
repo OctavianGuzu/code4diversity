@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Entity = require('../models/entity');
+var Event = require('../models/event');
 var https = require('https');
 
 // GET route for reading data
@@ -102,6 +103,33 @@ router.get('/logout', function (req, res, next) {
 			}
 		})
 	}
+})
+
+router.get('/getEntities', function (req, res, next) {
+	Entity.find({}).exec(function (err, result) {
+		res.json(result);
+	})
+})
+
+router.get('/addEvent', function (req, res, next) {
+	var response = {
+		status_code : 0,
+        status_message : "success",
+        data : false
+	};
+
+	var obj = {
+		entityId: req.query.entityId,
+		name: req.query.name,
+		description: req.query.description,
+		dimensions: null,
+		status: false
+	};
+
+	Event.create(obj, function (err, response) {
+		console.log(err);
+		res.json(response);
+	})
 })
 
 router.get('/addEntity', function (req, res, next) {

@@ -94,6 +94,62 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 }]);
 
 dash.controller("dashboardController", ["$scope", "$http", function( $scope, $http ) {
+    $scope.entities = null;
+    $(document).ready(function () {
+
+        $scope.populateLocs();
+       
+    })
+
+    $scope.populateLocs = function () {
+         var picker = $("#locPicker");
+        //don't forget error handling!
+        
+        $http.get('/getEntities').then( function (result) {
+             $scope.entities = result.data;
+            result.data.forEach( function(item) {
+                //console.log(item);
+                picker.append("<option>" + item.name +  "</option>");
+            });
+        });
+
+        
+    }
+
+    $('#EventInsertBtn').click(function (e) {
+        $scope.insertSucc2 = false;
+        $scope.insertFail2 = false;
+
+
+        var name = $('#NameEvent').val();
+        var entity = $('#locPicker').val();
+        var desc = $('#DescEvent').val();
+
+        if (name != "" && entity != "" && desc != "") {
+            var entityId;
+            $scope.entities.forEach(function (item) {
+                if (item.name == entity)
+                    entityId = item._id;
+            })
+            
+            var url_here = "/addEvent?name=" + name +
+                "&entityId=" + entityId +
+                "&description=" + desc;
+
+            $http.get(url_here)
+                .then(function (response) {
+                    $scope.insertSucc2 = true;
+                    $scope.insertFail2 = false;
+                });
+
+        } else {
+            $scope.$apply(function () {
+                $scope.insertFail2 = true;
+            })
+        }
+    })
+
+
     $('#EntityInsertBtn').click(function (e) {
         $scope.insertSucc = false;
         $scope.insertFail = false;

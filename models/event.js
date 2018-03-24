@@ -3,7 +3,7 @@ var util = require('../routes/util/recomandation');
 
 var EventSchema = new mongoose.Schema({
     entityId: {
-        type: Number,
+        type: String,
         required: true,
         trim: true
     },
@@ -19,7 +19,6 @@ var EventSchema = new mongoose.Schema({
     },
     dimensions: {
         type: Object,
-        required: true,
         trim: true
     },
     status: {
