@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var util = require('routes/util/recomandation');
+var ObjectID = require('mongodb').ObjectID;
 
 var UserProfileSchema = new mongoose.Schema({
     learnFactor: {
@@ -27,6 +28,21 @@ var UserProfileSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    eventsWent: {
+        type: Array,
+        required: false,
+        trim: true
+    },
+    eventsInterested: {
+        type: Array,
+        required: false,
+        trim: true
+    },
+    eventsGoing: {
+        type: Array,
+        required: false,
+        trim: true
+    },
     userId: {
         type: Number,
         required: true,
@@ -40,7 +56,19 @@ var UserProfileSchema = new mongoose.Schema({
  * @param callback
  */
 UserProfileSchema.statics.getUserProfile = function (userId, callback) {
-    UserProfile.findOne({ id: userId })
+    UserProfile.findOne({ _id: userId })
+        .exec (function (err, userProfiles) {
+            callback(null, userProfiles);
+        });
+};
+
+/**
+ * Gets all user profiles except the logged one
+ * @param userId
+ * @param callback
+ */
+UserProfileSchema.statics.getAllUsersProfiles = function (userId, callback) {
+    UserProfile.find({_id: { $nin: [ObjectID(userId)] } })
         .exec (function (err, userProfile) {
             callback(null, userProfile);
         });
