@@ -19,13 +19,13 @@
   
   <!-- <link type="text/css" href="css/map1.css" rel="stylesheet"> -->
 
-  <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+  <link rel="shortcut icon" type="image/png" href="favicon.ico"/>
 </head>
 
 <body class="fixed-nav bg-dark" id="page-top" ng-controller="dashboardController">
   <!-- Navigation-->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-    <a class="navbar-brand" href="#">Robotics map</a>
+    <a class="navbar-brand" href="#">RoboMap 🤖 </a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -33,31 +33,31 @@
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
         <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
           <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-dashboard"></i>
+            <i class="fa fa-fw fa-map-o"></i>
             <span class="nav-link-text">Map</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
           <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-area-chart"></i>
+            <i class="fa fa-fw fa-map-pin"></i>
             <span class="nav-link-text">Add entity</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
           <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-table"></i>
+            <i class="fa fa-fw fa-calendar-plus-o"></i>
             <span class="nav-link-text">Add event</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
           <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-area-chart"></i>
+            <i class="fa fa-fw fa-calendar"></i>
             <span class="nav-link-text">Event suggestions</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
           <a class="nav-link" href="#">
-            <i class="fa fa-fw fa-table"></i>
+            <i class="fa fa-fw fa-clock-o"></i>
             <span class="nav-link-text">Requests</span>
           </a>
         </li>
@@ -117,7 +117,7 @@
           <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button id="LogoutBtn" type="button" class="btn btn-primary">Logout</button>
+            <a id="LogoutBtn" role="button" class="btn btn-primary" href="/logout">Logout</a>
           </div>
         </div>
       </div>
