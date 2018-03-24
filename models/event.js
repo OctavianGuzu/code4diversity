@@ -36,6 +36,13 @@ EventSchema.statics.getAllUpcomingEvents = function (callback) {
         });
 };
 
+EventSchema.statics.getPendingEvents = function (callback) {
+    Event.find({ status: false })
+        .exec (function (err, pendingEvents) {
+            callback(null, pendingEvents);
+        });
+};
+
 /**
  * Normalizes the preferences dimensions before persisting
  */

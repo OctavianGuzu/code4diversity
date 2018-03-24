@@ -76,21 +76,21 @@ function getOthersLikedEvents(user, noOfResults, callback)
 {
     var userPreference = null;
     var partikip, allEvents ;
-    UserProfile.getUserProfile(user, function (err, userProfile) {
-        if (err || !userProfile) {
-            return null;
+    UserProfile.getUserProfile(user, function (userErr, userProfile) {
+        if (userErr || !userProfile) {
+            return callback(userErr);
         } else {
             userPreference = userProfile;
             var otherUsers = null;
-            UserProfile.getAllUsersProfiles(user, function (err, userProfiles) {
-                if (err || !userProfiles) {
-                    return null;
+            UserProfile.getAllUsersProfiles(user, function (othersErr, userProfiles) {
+                if (othersErr || !userProfiles) {
+                    return callback(othersErr);
                 } else {
                     otherUsers = userProfiles;
                     var events = null;
-                    Event.getAllUpcomingEvents(function(err, upComingEvents) {
-                        if (err || !events) {
-                            return null;
+                    Event.getAllUpcomingEvents(function(eventErr, upComingEvents) {
+                        if (eventErr || !events) {
+                            return callback(eventErr);
                         } else {
                             events = upComingEvents;
                             for (var i = 0; i < otherUsers.length; i++) {
@@ -151,14 +151,14 @@ function computeLikelinessScore(loggedUser, targetUser)
  * @param userLocation
  * @param maxRadius
  * @param noOfResults
- * @returns {*|string|ArrayBuffer|Blob|Array.<Event>}
+ * @param callback
  */
-function getNearEvents(userLocation, maxRadius, noOfResults)
+function getNearEvents(userLocation, maxRadius, noOfResults, callback)
 {
     var events = null;
     Event.getAllUpcomingEvents(function(err, upComingEvents) {
         if (err || !events) {
-            return null;
+            return callback(err);
         } else {
             events = upComingEvents;
         }
@@ -175,7 +175,7 @@ function getNearEvents(userLocation, maxRadius, noOfResults)
     }
 
     events.sort(compareByDistance);
-    return events.slice(1, noOfResults);
+    callback(events.slice(1, noOfResults));
 }
 
 function computeDistance(loc1, loc2)

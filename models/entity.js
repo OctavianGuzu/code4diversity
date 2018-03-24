@@ -68,6 +68,13 @@ EntitySchema.pre('save', function (next) {
     next();
 });
 
+EntitySchema.statics.getPendingEntities = function (callback) {
+    Entity.find({ status: false })
+        .exec (function (err, pendingEntities) {
+            callback(null, pendingEntities);
+        });
+};
+
 var Entity = mongoose.model('Entity', EntitySchema);
 module.exports = Entity;
 
