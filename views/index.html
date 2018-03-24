@@ -98,11 +98,25 @@
     </div>
   </nav>
 
-  <div id="map"></div>
-  <!-- <div class="content-wrapper">
-    <div class="container-fluid">
-      
-    </div>
+  
+<!--   <div class="content-wrapper">
+    <div class="container-fluid"> -->
+      <div id="map" style="width:100%;min-height:100vh"></div>
+      <script>
+      function initMap() {
+
+        // Create a map object and specify the DOM element for display.
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+        console.log("here");
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJWKTh1B_Hh7CuMVoGnEy3b58F9axNuY&callback=initMap"
+    async defer></script>
+<!--     </div>
   </div> -->
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
@@ -286,6 +300,8 @@
     <script src="js/ng/root.js"></script>
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
 
     </div>
 </body>
