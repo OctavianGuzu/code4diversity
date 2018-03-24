@@ -3,24 +3,20 @@
  */
 var User = require('../models/user');
 var UserProfile = require('../models/userProfile');
+var Event = require('../models/event');
 
-
-function getSuggestedEvents()
-{
-
+function compareEvents(a,b) {
+    return a.userScore > b.userScore
+        ? 1
+        : (a.userScore < b.userScore ? -1 : 0);
 }
 
-function getSimilarEvents()
-{
-
-}
-
-function getNearEvents()
-{
-
-}
-
-function computeProfilePredictionScore(user, event)
+/**
+ * Returns the top noOfResults future Events based on the UserProfile
+ * @param noOfResults
+ * @returns {*}
+ */
+function getSuggestedEvents(noOfResults)
 {
     var userPreference = null;
     UserProfile.getUserProfile(user._id, function (err, userProfile) {
@@ -31,6 +27,37 @@ function computeProfilePredictionScore(user, event)
         }
     });
 
+    var events = null;
+    Event.getAllUpcomingEvents(function(err, upComingEvents) {
+        if (err || !events) {
+            return null;
+        } else {
+            events = upComingEvents;
+        }
+    });
+
+    var currentEvent;
+    for (var i = 0; i < events.length; i++) {
+        currentEvent= events[i];
+        events[i].userScore = computeProfilePredictionScore(userPreference, currentEvent);
+    }
+
+    events.sort(compareEvents);
+    return events.slice(1, noOfResults);
+}
+
+function getOthersLikedEvents(noOfResults)
+{
+
+}
+
+function getNearEvents(noOfResults)
+{
+
+}
+
+function computeProfilePredictionScore(userPreference, event)
+{
     var eventCharacteristic = event.dimensions;
     return userPreference.learnFactor * eventCharacteristic.learnDimension +
         userPreference.buildFactor * eventCharacteristic.buildDimension +

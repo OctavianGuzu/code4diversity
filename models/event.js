@@ -24,6 +24,13 @@ var EventSchema = new mongoose.Schema({
     }
 });
 
+EventSchema.statics.getAllUpcomingEvents = function (callback) {
+    Event.find({"date": {"$gte": new Date()}})
+        .exec (function (err, events) {
+            callback(null, events);
+        });
+};
+
 /**
  * Normalizes the preferences dimensions before persisting
  */
