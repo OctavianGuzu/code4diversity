@@ -21,6 +21,11 @@ var EventSchema = new mongoose.Schema({
         type: Object,
         required: true,
         trim: true
+    },
+    status: {
+        type: Boolean,
+        required: true,
+        trim: true
     }
 });
 

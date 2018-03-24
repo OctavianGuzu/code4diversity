@@ -73,7 +73,7 @@ router.post('/register', function (req, res, next) {
 		response.err = true;
 		res.status(200).send(response);
 	}
-})
+});
 
 router.get('/index', function (req, res, next) {
 	User.findById (req.session.userId)

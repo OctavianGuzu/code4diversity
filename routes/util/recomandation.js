@@ -16,7 +16,7 @@ function compareByDistance(a,b) {
         : (a.distanceToUser < b.distanceToUser ? -1 : 0);
 }
 
-function compareEventsByLikeliness()
+function compareEventsByLikeliness(a, b)
 {
     return a.likeliness > b.likeliness
         ? 1
@@ -66,6 +66,12 @@ function computeProfilePredictionScore(userPreference, event)
         userPreference.networkFactor * eventCharacteristic.networkDimension;
 }
 
+/**
+ * Returns the top noOfResults future Events based on the suggestions from users with similar preferences
+ * @param user
+ * @param noOfResults
+ * @param callback
+ */
 function getOthersLikedEvents(user, noOfResults, callback)
 {
     var userPreference = null;
@@ -87,18 +93,14 @@ function getOthersLikedEvents(user, noOfResults, callback)
                             return null;
                         } else {
                             events = upComingEvents;
-                            var iteratorUserProfile;
-                            var currentEvent;
                             for (var i = 0; i < otherUsers.length; i++) {
-                                iteratorUserProfile= otherUsers[i];
-                                iteratorUserProfile.likeliness = computeLikelinessScore(userPreference, iteratorUserProfile);
+                                otherUsers[i].likeliness = computeLikelinessScore(userPreference, otherUsers[i]);
+                                allEvents = otherUsers[i].eventsWent.concat(
+                                    otherUsers[i].eventsInterested.concat(otherUsers[i].eventsGoing)
+                                );
                                 for (var j = 0; j < events.length; j++) {
-                                    currentEvent= events[j];
-                                    allEvents = iteratorUserProfile.eventsWent.concat(
-                                        iteratorUserProfile.eventsInterested.concat(iteratorUserProfile.eventsGoing)
-                                    );
-                                    partikip = allEvents.indexOf(currentEvent) === -1 ? 0 : 1 ;
-                                    currentEvent.likeliness = iteratorUserProfile.likeliness * partikip;
+                                    partikip = allEvents.indexOf(events[j]) === -1 ? 0 : 1 ;
+                                    events[j].likeliness = otherUsers[i].likeliness * partikip;
                                 }
                             }
 
