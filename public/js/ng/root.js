@@ -31,9 +31,15 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
         }
     })
 
+
+
 	$('#registerAcc').click(function (e) {
 		window.location.href = '/register';
 	});
+
+    $('#suggestionBtn').click(function (e) {
+       /** TODO: sugestion modal*/
+    });
 
     $scope.registerAction = function(obj) {
         var data = obj;

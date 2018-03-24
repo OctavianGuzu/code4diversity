@@ -50,9 +50,9 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#SuggestionModal">
             <i class="fa fa-fw fa-calendar"></i>
-            <span class="nav-link-text">Event suggestions</span>
+            <span class="nav-link-text" id="suggestionBtn">Event suggestions</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
@@ -259,6 +259,31 @@
         </div>
       </div>
     </div>
+
+  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Some cool events</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ceva
+          ceva
+          ceva
+          ceva
+        </div>
+        <div class="modal-footer">
+          <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
+          <p class="text-danger" ng-show="insertFail">Don't leave fields empty!</p>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <button id="EntityInsertBtn" type="button" class="btn btn-primary">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
     <div class="modal fade" id="EventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

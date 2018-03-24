@@ -1,4 +1,6 @@
 var map, infoWindow;
+var userLocation = null;
+
 function initMap() {
 
         // Latlng for map center
@@ -72,7 +74,7 @@ function initMap() {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-
+                userLocation = pos;
                 infoWindow.setPosition(pos);
                 infoWindow.setContent('Location found.');
                 infoWindow.open(map);
@@ -84,14 +86,6 @@ function initMap() {
             // Browser doesn't support Geolocation
             handleLocationError(false, infoWindow, map.getCenter());
         }
-        /*var beaches = [
-            ['Universitate', -33.890542, 151.274856, 4],
-            ['HighSchool', -33.923036, 151.259052, 5],
-            ['Private Robotics Club', -34.028249, 151.157507, 3],
-            ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
-            ['Maroubra Beach', -33.950198, 151.259302, 1]
-        ];*/
-
 
         var icons = {
             university: {
@@ -147,11 +141,8 @@ function initMap() {
             });
             marker.setMap(map);
         });
+}
 
-        // To add the marker to the map, call setMap();
-        // marker2.setMap(map2);
-
-    }
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
