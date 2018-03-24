@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var util = require('routes/util/recomandation');
+var util = require('../routes/util/recomandation');
 var ObjectID = require('mongodb').ObjectID;
 
 var UserProfileSchema = new mongoose.Schema({

@@ -110,6 +110,17 @@ router.get('/addEntity', function (req, res, next) {
         status_message : "success",
         data : false
 	};
+	var type;
+	if (req.query.type == "Highschool")
+		type = 0;
+	else if (req.query.type == "University")
+		type = 1;
+	else if (req.query.type = "Public club")
+		type = 2;
+	else if (req.query.type == "Private club")
+		type = 3;
+	else if (req.query.type == "Private Company")
+		type = 4;
 	var obj = {
 		location: req.query.location,
 		name: req.query.name,
@@ -119,7 +130,9 @@ router.get('/addEntity', function (req, res, next) {
 		imageUrl: req.query.imagelink,
 		address: req.query.address,
 		description: req.query.description,
-		//TODO
+		type: type,
+		status: false,
+		rating: 0
 	}
 	var where = "https://maps.googleapis.com/maps/api/geocode/json?address=" + req.query.address + "&key=AIzaSyAoJWKTh1B_Hh7CuMVoGnEy3b58F9axNuY"
 	https.get(where, (resp) => {
@@ -132,9 +145,19 @@ router.get('/addEntity', function (req, res, next) {
 	 
 	  // The whole response has been received. Print out the result.
 	  resp.on('end', () => {
-	    console.log(JSON.parse(data));
-	    res.json(response);
+	    data = JSON.parse(data);
+	    console.log(data);
+	    if (data.results[1]) {
+		    obj.long = data.results[1].geometry.location.lng;
+		    obj.lat = data.results[1].geometry.location.lat;
+		} else {
+			obj.long = data.results[0].geometry.location.lng;
+		    obj.lat = data.results[0].geometry.location.lat;
+		}
 	    //TODO insert in DB
+	    Entity.create(obj, function (err, result) {
+	    	res.json(response);
+	    })
 	  });
 	 
 	}).on("error", (err) => {
