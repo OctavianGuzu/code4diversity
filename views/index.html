@@ -74,9 +74,18 @@
         <li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <!-- <input class="form-control" type="text" placeholder="Search for..."> -->
+              <select class="selectpicker" id="selectSearch">
+                <option>All</option>
+                <option>Highschool</option>
+                <option>University</option>
+                <option>Public Club</option>
+                <option>Private Club</option>
+                <option>Company</option>
+              </select>
+
               <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">
+                <button class="btn btn-primary" type="button" id="searchbtn">
                   <i class="fa fa-search"></i>
                 </button>
               </span>
@@ -260,7 +269,7 @@
       </div>
     </div>
 
-  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -270,10 +279,17 @@
           </button>
         </div>
         <div class="modal-body">
-          ceva
-          ceva
-          ceva
-          ceva
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+            </thead>
+            <tbody id="suggestionBody">
+            <tr id="srow0"></tr>
+            </tbody>
+          </table>
         </div>
         <div class="modal-footer">
           <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
@@ -308,6 +324,10 @@
             <div class="form-group">
               <label for="exampleInputEmail1">Description</label>
               <input class="form-control" id="DescEvent" type="text" aria-describedby="Name" placeholder="Enter description">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Event Date:</label>
+              <input class="form-control" id="DateEvent" type="text" placeholder="Enter a Date">
             </div>
               <div class="form-group">
                   <label for="exampleInputEmail1">Learn dimension</label>

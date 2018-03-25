@@ -41,7 +41,6 @@ router.get('/register', function (req, res, next) {
 });
 
 router.get('/getSuggestions', function (req, res, next) {
-    console.log(req.query.loc);
     var events = recommender.getNearEvents(req.query.loc, 3, function(events) {
         res.json(events);
 	});
@@ -175,6 +174,7 @@ router.get('/addEvent', function (req, res, next) {
 		entityId: req.query.entityId,
 		name: req.query.name,
 		description: req.query.description,
+        eventDate: req.query.eventDate,
 		dimensions: req.query.dimensions,
 		status: false
 	};

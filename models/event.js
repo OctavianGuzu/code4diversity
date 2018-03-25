@@ -25,11 +25,16 @@ var EventSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         trim: true
+    },
+    eventDate:{
+        type: Date,
+        required: true,
+        trim: true
     }
 });
 
 EventSchema.statics.getAllUpcomingEvents = function (callback) {
-    Event.find({"date": {"$gte": new Date()}})
+    Event.find({"eventDate": {"$gte": new Date()}})
         .exec (function (err, events) {
             callback(null, events);
         });
