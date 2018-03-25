@@ -99,7 +99,6 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         $http.get('/getUserName').then(function (result) {
             $('#titleBox').text("RoboMap 🤖   " + result.data);
         })
-       
     })
 
     $scope.populateLocs = function () {
@@ -160,7 +159,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 "&entityId=" + entityId +
                 "&description=" + desc +
                 "&dimensions=" + JSON.stringify(dimensions);
-            console.log(url_here);
+
             $http.get(url_here)
                 .then(function (response) {
                     $scope.insertSucc2 = true;
@@ -377,8 +376,12 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                     console.log(my_events);
                     $('#eventBody').empty();
                     $('#eventBody').append("<tr id=\"row" + 0 + "\"></tr>");
+                    var quickUrl;
                     for(var j = 0; j < my_events.length; j++) {
-                        $('#row' + j).html("<td>" + my_events[j].name + "</td><td>"+ my_events[j].description +"</td>");
+
+                         quickUrl = "/addInterest?event="  + my_events[j]._id;
+                        $('#row' + j).html("<td>" + my_events[j].name + "</td><td>"
+                            + my_events[j].description +'</td><td ><a href="' + quickUrl +  '">Interested</a></td>td>');
                         $('#eventBody').append("<tr id=\"row" + (j + 1) + "\"></tr>");
                     }
 

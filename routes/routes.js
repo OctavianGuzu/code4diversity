@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Entity = require('../models/entity');
 var Event = require('../models/event');
+var UserProfile = require('../models/userProfile');
 var recommender = require('../routes/util/recomandation');
 var https = require('https');
 
@@ -68,7 +69,7 @@ router.post('/register', function (req, res, next) {
 			name: obj.name,
 			password: obj.password,
 			administrator: false
-		}
+		};
 
 		User.create(userData, function (err, user) {
 			if (err) {
@@ -76,8 +77,19 @@ router.post('/register', function (req, res, next) {
 				res.status(200).send(response);
 			} else {
 				req.session.userId = user._id;
-				res.status(200).send(response);
-			}
+                var objUserProfile = {
+                    learnFactor : 1,
+                    teachFactor : 1,
+                    buildFactor : 1,
+                    competeFactor : 1,
+                    networkFactor : 1,
+                    eventsInterested : [],
+                    userId : user._ids
+                };
+                UserProfile.create(objUserProfile, function (err, user) {
+                    res.status(200).send(response);
+				});
+            }
 		})
 	} else {
 		response.err = true;
@@ -126,6 +138,32 @@ router.get('/getEvents', function (req, res, next) {
 	})
 })
 
+router.get('/addInterest', function (req, res, next) {
+    var myResponse = {
+        status_code : 0,
+        status_message : "success",
+        data : false
+    };
+    console.log(req.query);
+	var eventId = req.query.event;
+
+    var userId = req.session.userId;
+    UserProfile.getUserProfile(userId, function (userErr, userProfile) {
+        if (userErr || !userProfile) {
+            res.redirect('/');
+        } else {
+        	console.log(userProfile);
+            UserProfile.update(
+                { _id:  userProfile._id},
+                { $push: { eventsInterested: eventId }}, function (err, response) {
+                console.log(err);
+                res.redirect('index');
+            });
+        }
+    });
+
+});
+
 router.get('/addEvent', function (req, res, next) {
 	var response = {
 		status_code : 0,
@@ -145,7 +183,7 @@ router.get('/addEvent', function (req, res, next) {
 		console.log(err);
 		res.json(response);
 	})
-})
+});
 
 router.get('/getUserName', function (req, res, next) {
 	User.findById(req.session.userId)

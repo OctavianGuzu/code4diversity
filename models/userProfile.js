@@ -28,17 +28,7 @@ var UserProfileSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    eventsWent: {
-        type: Array,
-        required: false,
-        trim: true
-    },
     eventsInterested: {
-        type: Array,
-        required: false,
-        trim: true
-    },
-    eventsGoing: {
         type: Array,
         required: false,
         trim: true
@@ -56,7 +46,7 @@ var UserProfileSchema = new mongoose.Schema({
  * @param callback
  */
 UserProfileSchema.statics.getUserProfile = function (userId, callback) {
-    UserProfile.findOne({ _id: userId })
+    UserProfile.findOne({ userId: userId })
         .exec (function (err, userProfiles) {
             callback(null, userProfiles);
         });
