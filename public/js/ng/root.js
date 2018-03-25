@@ -284,7 +284,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     var mapOptions = {
         zoom: 8,
         center: myLatlng,
-        styles: black_map_style
+        styles: []
     };
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
