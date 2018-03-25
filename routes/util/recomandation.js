@@ -98,7 +98,7 @@ function getOthersLikedEvents(user, noOfResults, callback)
                             console.log(events);
                             console.log(userProfiles);
                             for (var i = 0; i < userProfiles.length; i++) {
-                                userProfiles[i].likeliness = computeLikelinessScore(userPreference, otherUsers[i]);
+                                userProfiles[i].likeliness = computeLikelinessScore(userPreference, userProfiles[i]);
                                 for (var j = 0; j < events.length; j++) {
                                     partikip = userProfiles[i].eventsInterested.indexOf(events[j]) === -1 ? 0 : 1 ;
                                     events[j].likeliness = userProfiles[i].likeliness * partikip;

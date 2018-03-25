@@ -365,7 +365,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         i = i + 1;
         var femaleBadge = " ";
         // console.log(feature.info.women);
-        if(feature.info.women.toString().localeCompare("45%")  ) {
+        if(feature.info.women.toString().localeCompare("45%") >=  0) {
             // console.log(feature.info.women);
             femaleBadge = "   <img src=\"medal.png\"  height=\"20\" width=\"15\"> </p>\n  ";
         }
