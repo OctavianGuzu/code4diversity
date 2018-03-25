@@ -25,6 +25,11 @@ var EventSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         trim: true
+    },
+    eventDate:{
+        type: String,
+        required: true,
+        trim: true
     }
 });
 

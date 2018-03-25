@@ -150,16 +150,19 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             networkFactor: $('#dimNetworkEvent').val()
         };
 
-        if (name != "" && entity != "" && desc != "") {
+        var date = $('#DateEvent').val();
+
+        if (name != "" && entity != "" && desc != "" && date != "") {
             var entityId;
             $scope.entities.forEach(function (item) {
                 if (item.name == entity)
                     entityId = item._id;
             })
-            
+
             var url_here = "/addEvent?name=" + name +
                 "&entityId=" + entityId +
                 "&description=" + desc +
+                "&eventDate=" + date +
                 "&dimensions=" + JSON.stringify(dimensions);
             console.log(url_here);
             $http.get(url_here)
