@@ -150,7 +150,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             networkFactor: $('#dimNetworkEvent').val()
         };
 
-        var date = $('#DateEvent').val();
+        var date = (new Date($('#DateEvent').val())).toUTCString();
 
         if (name != "" && entity != "" && desc != "" && date != "") {
             var entityId;
@@ -352,6 +352,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
 }
 
     $('#suggestionBtn').click(function (e) {
+        console.log("Am apasat suggestionbtn");
         var data = {
             loc : globalUserLocation
         };
@@ -364,6 +365,14 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             data: data,
             success: function (res){
                 console.log(res);
+                var events = res;
+                $('suggestionBody').empty();
+                $('suggestionBody').append("<tr id=\"srow" + 0 + "\"></tr>");
+                for(var j = 0; j < events.length; j++) {
+                    $('#srow' + j).html("<td>" + events[j].name + "</td><td>"+ events[j] +"</td>");
+                    $('#suggestionBody').append("<tr id=\"srow" + (j + 1) + "\"></tr>");
+                }
+                $('#SuggestionModal').modal('show');
                 console.log("done");
             }
         });
@@ -400,7 +409,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                     events.forEach(function (event) {
                         if (event.entityId == _id)
                             my_events.push(event);
-                    })
+                    });
+                    console.log("In events Show");
                     console.log(my_events);
                     $('#eventBody').empty();
                     $('#eventBody').append("<tr id=\"row" + 0 + "\"></tr>");

@@ -155,23 +155,28 @@ function computeLikelinessScore(loggedUser, targetUser)
 function getNearEvents(userLocation, noOfResults, callback)
 {
     var events = null;
+    console.log("i'm in getNearEvents");
     Event.getAllUpcomingEvents(function(err, upComingEvents) {
-        if (err || !events) {
+        console.log("getAllUpcoming")
+        console.log(upComingEvents);
+        if (err || !upComingEvents) {
             callback(err);
         } else {
             events = upComingEvents;
             var currentEvent;
             for (var i = 0; i < events.length; i++) {
-                currentEvent= events[i];
+                currentEvent = events[i];
                 currentEvent.loc = {
                     lat: currentEvent.lat,
                     lng: currentEvent.lng
                 };
                 events[i].distanceToUser = computeDistance(userLocation, currentEvent.loc);
+                console.log("events[" + i+ "]=" + events[i].distanceToUser);
+
             }
 
             events.sort(compareByDistance);
-            callback(events.slice(1, noOfResults));
+            callback(events.slice(0, noOfResults));
         }
     });
 

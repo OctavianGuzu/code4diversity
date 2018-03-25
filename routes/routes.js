@@ -40,7 +40,6 @@ router.get('/register', function (req, res, next) {
 });
 
 router.get('/getSuggestions', function (req, res, next) {
-    console.log(req.query.loc);
     var events = recommender.getNearEvents(req.query.loc, 3, function(events) {
         res.json(events);
 	});

@@ -269,7 +269,7 @@
       </div>
     </div>
 
-  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -279,10 +279,17 @@
           </button>
         </div>
         <div class="modal-body">
-          ceva
-          ceva
-          ceva
-          ceva
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Description</th>
+            </tr>
+            </thead>
+            <tbody id="suggestionBody">
+            <tr id="srow0"></tr>
+            </tbody>
+          </table>
         </div>
         <div class="modal-footer">
           <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
