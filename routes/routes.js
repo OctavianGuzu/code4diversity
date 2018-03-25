@@ -125,6 +125,7 @@ router.get('/getEvents', function (req, res, next) {
 	})
 })
 
+
 router.get('/addEvent', function (req, res, next) {
 	var response = {
 		status_code : 0,
@@ -138,6 +139,8 @@ router.get('/addEvent', function (req, res, next) {
 		description: req.query.description,
         eventDate: req.query.eventDate,
 		dimensions: req.query.dimensions,
+        entityLng: req.query.entityLng,
+        entityLat: req.query.entityLat,
 		status: false
 	};
 

@@ -73,6 +73,14 @@ EntitySchema.statics.getPendingEntities = function (callback) {
         });
 };
 
+EntitySchema.statics.getEntityByEvent = function (callback) {
+    Entity.findOne({})
+        .exec (function (err, entity) {
+            callback(null, entity);
+        });
+    
+};
+
 var Entity = mongoose.model('Entity', EntitySchema);
 module.exports = Entity;
 
