@@ -41,9 +41,21 @@ router.get('/register', function (req, res, next) {
 });
 
 router.get('/getSuggestions', function (req, res, next) {
-    var events = recommender.getNearEvents(req.query.loc, 3, function(events) {
+    var events = recommender.getNearEvents(req.query.loc, 2, function(events) {
         res.json(events);
 	});
+});
+
+router.get('/getSuggestions1', function (req, res, next) {
+    var events = recommender.getSuggestedEvents(req.session.userId, 2, function(events) {
+        res.json(events);
+    });
+});
+
+router.get('/getSuggestions2', function (req, res, next) {
+    var events = recommender.getOthersLikedEvents(req.session.userId, 2, function(events) {
+        res.json(events);
+    });
 });
 
 router.post('/register', function (req, res, next) {

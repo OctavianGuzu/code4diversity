@@ -58,7 +58,8 @@ UserProfileSchema.statics.getUserProfile = function (userId, callback) {
  * @param callback
  */
 UserProfileSchema.statics.getAllUsersProfiles = function (userId, callback) {
-    UserProfile.find({_id: { $nin: [ObjectID(userId)] } })
+    console.log(userId);
+    UserProfile.find({userId: { $ne: userId } })
         .exec (function (err, userProfile) {
             callback(null, userProfile);
         });

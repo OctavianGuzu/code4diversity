@@ -38,7 +38,7 @@ function getSuggestedEvents(user, noOfResults, callback) {
             userPreference = userProfile;
             var events = null;
             Event.getAllUpcomingEvents(function (err, upComingEvents) {
-                if (err || !events) {
+                if (err || !upComingEvents) {
                     return null;
                 } else {
                     events = upComingEvents;
@@ -47,10 +47,8 @@ function getSuggestedEvents(user, noOfResults, callback) {
                         currentEvent = events[i];
                         events[i].userScore = computeProfilePredictionScore(userPreference, currentEvent);
                     }
-                        
-
                     events.sort(compareByUserScore);
-                    callback(events.slice(1, noOfResults));
+                    callback(events.slice(0, noOfResults));
                 }
             });
         }
@@ -82,28 +80,31 @@ function getOthersLikedEvents(user, noOfResults, callback)
             return callback(userErr);
         } else {
             userPreference = userProfile;
-            var otherUsers = null;
             UserProfile.getAllUsersProfiles(user, function (othersErr, userProfiles) {
                 if (othersErr || !userProfiles) {
                     return callback(othersErr);
                 } else {
-                    otherUsers = userProfiles;
-                    var events = null;
+                    var events = [];
+                    if (userProfiles.length === 0) {
+                        return callback([]);
+                    }
                     Event.getAllUpcomingEvents(function(eventErr, upComingEvents) {
-                        if (eventErr || !events) {
+                        if (eventErr || !upComingEvents) {
                             return callback(eventErr);
                         } else {
                             events = upComingEvents;
-                            for (var i = 0; i < otherUsers.length; i++) {
-                                otherUsers[i].likeliness = computeLikelinessScore(userPreference, otherUsers[i]);
+                            console.log(events);
+                            console.log(userProfiles);
+                            for (var i = 0; i < userProfiles.length; i++) {
+                                userProfiles[i].likeliness = computeLikelinessScore(userPreference, otherUsers[i]);
                                 for (var j = 0; j < events.length; j++) {
-                                    partikip = otherUsers[i].eventsInterested.indexOf(events[j]) === -1 ? 0 : 1 ;
-                                    events[j].likeliness = otherUsers[i].likeliness * partikip;
+                                    partikip = userProfiles[i].eventsInterested.indexOf(events[j]) === -1 ? 0 : 1 ;
+                                    events[j].likeliness = userProfiles[i].likeliness * partikip;
                                 }
                             }
 
                             events.sort(compareEventsByLikeliness);
-                            callback(events.slice(1, noOfResults));
+                            callback(events.slice(0, noOfResults));
                         }
                     });
                 }
@@ -137,10 +138,7 @@ function computeLikelinessScore(loggedUser, targetUser)
 function getNearEvents(userLocation, noOfResults, callback)
 {
     var events = null;
-    console.log("i'm in getNearEvents");
     Event.getAllUpcomingEvents(function(err, upComingEvents) {
-        console.log("getAllUpcoming")
-        console.log(upComingEvents);
         if (err || !upComingEvents) {
             callback(err);
         } else {
@@ -154,9 +152,7 @@ function getNearEvents(userLocation, noOfResults, callback)
                 };
                 events[i].distanceToUser = computeDistance(userLocation, currentEvent.loc);
                 console.log("events[" + i+ "]=" + events[i].distanceToUser);
-
             }
-
             events.sort(compareByDistance);
             callback(events.slice(0, noOfResults));
         }
@@ -170,3 +166,5 @@ function computeDistance(loc1, loc2)
 }
 
 module.exports.getNearEvents = getNearEvents;
+module.exports.getSuggestedEvents = getSuggestedEvents;
+module.exports.getOthersLikedEvents = getOthersLikedEvents;

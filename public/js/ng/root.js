@@ -363,18 +363,50 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             async: true,
             data: data,
             success: function (res){
-                console.log(res);
                 var events = res;
                 $('suggestionBody').empty();
                 $('suggestionBody').append("<tr id=\"srow" + 0 + "\"></tr>");
                 for(var j = 0; j < events.length; j++) {
-                    $('#srow' + j).html("<td>" + events[j].name + "</td><td>"+ events[j] +"</td>");
+                    $('#srow' + j).html("<td>" + events[j].name + "</td><td>"+ events[j].description +"</td>");
                     $('#suggestionBody').append("<tr id=\"srow" + (j + 1) + "\"></tr>");
                 }
-                $('#SuggestionModal').modal('show');
-                console.log("done");
             }
         });
+        $.ajax
+        ({
+            type: "GET",
+            url: "/getSuggestions1",
+            dataType: 'json',
+            async: true,
+            data: {},
+            success: function (res){
+                var events = res;
+                $('suggestionBody1').empty();
+                $('suggestionBody1').append("<tr id=\"ssrow" + 0 + "\"></tr>");
+                for(var j = 0; j < events.length; j++) {
+                    $('#ssrow' + j).html("<td>" + events[j].name + "</td><td>"+ events[j].description +"</td>");
+                    $('#suggestionBody1').append("<tr id=\"ssrow" + (j + 1) + "\"></tr>");
+                }
+            }
+        });
+        $.ajax
+        ({
+            type: "GET",
+            url: "/getSuggestions2",
+            dataType: 'json',
+            async: true,
+            data: {},
+            success: function (res){
+                var events = res;
+                $('suggestionBody2').empty();
+                $('suggestionBody2').append("<tr id=\"sssrow" + 0 + "\"></tr>");
+                for(var j = 0; j < events.length; j++) {
+                    $('#sssrow' + j).html("<td>" + events[j].name + "</td><td>"+ events[j].description +"</td>");
+                    $('#suggestionBody2').append("<tr id=\"sssrow" + (j + 1) + "\"></tr>");
+                }
+            }
+        });
+        $('#SuggestionModal').modal('show');
     });
 
     function makeInfoWindowEvent(map, infowindow, contentString, marker, _id) {
