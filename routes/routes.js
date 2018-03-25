@@ -5,6 +5,7 @@ var Entity = require('../models/entity');
 var Event = require('../models/event');
 var recommender = require('../routes/util/recomandation');
 var https = require('https');
+var async = require('async');
 
 // GET route for reading data
 router.get('/', function (req, res, next) {
@@ -126,6 +127,13 @@ router.get('/getEvents', function (req, res, next) {
 	})
 })
 
+router.get('/isAdmin', function (req, res, next) {
+	User.findById(req.session.userId)
+		.exec(function (err, user) {
+			res.json(user.administrator);
+		})
+})
+
 router.get('/addEvent', function (req, res, next) {
 	var response = {
 		status_code : 0,
@@ -151,6 +159,57 @@ router.get('/getUserName', function (req, res, next) {
 	User.findById(req.session.userId)
 		.exec(function (err, user) {
 			res.json(user.name);
+		})
+})
+
+router.get('/getPending', function(req, res, next) {
+	var entities;
+	var events;
+	async.parallel({
+		"Entities": function (cb) {
+			Entity.find({status: false}).exec(function (err, result) {
+				entities = result;
+				cb(null);
+			})
+		},
+		"Events": function (cb) {
+			Event.find({status: false}).exec(function (err, result) {
+				events = result;
+				cb(null);
+			})
+		}
+	}, function (ressssss) {
+		var obj = {
+			entities: entities,
+			events: events
+		}
+		res.json(obj);
+	})
+})
+
+router.get('/approveEntity', function (req, res, next) {
+	User.findById(req.session.userId)
+		.exec(function (err, user) {
+			if (!user.administrator) {
+				res.json({err: false});
+			} else {
+				Entity.update({_id: req.query._id}, {status: true}, function (err, result) {
+					res.redirect('index');
+				})
+			}
+		})
+})
+
+router.get('/approveEvent', function (req, res, next) {
+	User.findById(req.session.userId)
+		.exec(function (err, user) {
+			if (!user.administrator) {
+				res.json({err: false});
+			} else {
+				Event.update({_id: req.query._id}, {status: true}, function (err, result) {
+					res.redirect('index');
+				})
+			}
 		})
 })
 
