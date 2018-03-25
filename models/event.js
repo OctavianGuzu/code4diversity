@@ -30,6 +30,16 @@ var EventSchema = new mongoose.Schema({
         type: Date,
         required: true,
         trim: true
+    },
+    entityLng: {
+        type: Number,
+        required: true,
+        trim: true
+    },
+    entityLat: {
+        type: Number,
+        required: true,
+        trim: true
     }
 });
 

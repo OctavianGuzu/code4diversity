@@ -30,7 +30,7 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
             };
             $scope.registerAction(obj);
         }
-    })
+    });
 
 
 
@@ -56,7 +56,7 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
                 }
             }
         });
-    }
+    };
 
 	$scope.checkLoogin = function(email, pass, cb) {
 		var data2 = {
@@ -82,10 +82,6 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
             }
         });
 
-       // $http.post('/', data).then(function (res) {
-       //      console.log(body);
-       //      cb(body);
-       // })
 	}
 
 }]);
@@ -191,28 +187,37 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         if (name != "" && entity != "" && desc != "" && date != "") {
             var entityId;
             $scope.entities.forEach(function (item) {
-                if (item.name == entity)
+                if (item.name === entity)
                     entityId = item._id;
             })
-
-            var url_here = "/addEvent?name=" + name +
-                "&entityId=" + entityId +
-                "&description=" + desc +
-                "&eventDate=" + date +
-                "&dimensions=" + JSON.stringify(dimensions);
-
-            $http.get(url_here)
-                .then(function (response) {
-                    $scope.insertSucc2 = true;
-                    $scope.insertFail2 = false;
-                });
-
+            var url_entity = "/getEntities";
+            $http.get(url_entity).then(function (responseEntity) {
+                for(var i =0; i < responseEntity.data.length; i++) {
+                    if (responseEntity.data[i]._id === entityId) {
+                        var Lat = responseEntity.data[i].lat;
+                        var Long = responseEntity.data[i].long;
+                    }
+                }
+                var url_here = "/addEvent?name=" + name +
+                    "&entityId=" + entityId +
+                    "&description=" + desc +
+                    "&eventDate=" + date +
+                    "&entityLat=" + Lat +
+                    "&entityLng=" + Long +
+                    "&dimensions=" + JSON.stringify(dimensions);
+                console.log(url_here);
+                $http.get(url_here)
+                    .then(function (response) {
+                        $scope.insertSucc2 = true;
+                        $scope.insertFail2 = false;
+                    });
+            });
         } else {
             $scope.$apply(function () {
                 $scope.insertFail2 = true;
             })
         }
-    })
+    });
 
     $('#searchbtn').click(function (e) {
         var type_value = $('#selectSearch').val();
@@ -283,7 +288,6 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     };
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    //console.log("Map init");
     // var infowindow;
     // infoWindow = new google.maps.InfoWindow;
 
@@ -338,7 +342,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 obj: obj,
                 info: {
                     name: item.name,
-                    img: item.imageUrl != "" ? item.imageUrl : "http://img.alibaba.com/photo/10888445/Radio_Controlled_Robosapien_Style_Robot_Toy_Roboactor.jpg",
+                    img: item.imageUrl != "" ? item.imageUrl : "https://i.imgur.com/6FVecGh.png",
                     address: item.address,
                     contact: "0755434879",
                     description: item.description,
@@ -366,21 +370,22 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         });
 
         // makeInfoWindowEvent(map, infowindow, "<div id=\"content\">\n" +
-        makeInfoWindowEvent(marker, infowindow, "<div id=\"content\">\n" +
+        makeInfoWindowEvent(marker, infowindow,  feature.obj.type,"<div id=\"content\">\n" +
             "  <div id=\"siteNotice\">\n" +
             "  </div>\n" +
             "<h4 id=\"firstHeading\" class=\"firstHeading\">" + feature.info.name + "</h4>"+
             "  <div id=\"bodyContent\">\n" +
             //" <div class=\"p-3 mb-2 bg-dark text-white\">Accenture</div>\n"+
-            "  <img src=" + feature.info.img + " class=\"centerImage\" height=\"100\" width=\"150\">\n" +
+            "  <img src=" + feature.info.img + " class=\"centerImage\" height=\"120\" width=\"150\">\n" +
             "  </div>\n" +
-            "  <p class=\"text-dark\">Address: " + feature.info.address + "</p>\n" +
+            "<p  "+"</p>\n"+
+            "  <p class=\"text-dark\"><b><b>Address: <b><b>" + feature.info.address + "</b></p>\n" +
             "  <p class=\"text-dark\">Contact: " + feature.info.contact + "</p>\n" +
             "  <p class=\"text-dark\">Description: " + feature.info.description + "</p>\n" +
             "  <p class=\"text-dark\">Women: " + feature.info.women +"</p>\n" +
             "  <p class=\"text-dark\">Rating:"+ feature.info.rating +"</p>\n" +
             "  </div>\n" +
-            "  <p class=\"text-dark\">Overall sentiment: " + feature.info.sentiment + "</p>\n"+
+            "  <p class=\"text-dark\">Overall sentiment: " + feature.info.sentiment + "</b></b></p>\n"+
             " <a href=\"#\"  id=\"see-events\"  style=\"border:transparent ; background-color: transparent;\" ><img src=\"SeeEvents.png\"</a>", marker, feature.info._id);
         //<button style="border:1px solid black; background-color: transparent;">Test</button>
         marker.setMap($scope.map);
@@ -446,26 +451,39 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         $('#SuggestionModal').modal('show');
     });
 
-    function makeInfoWindowEvent(map, infowindow, contentString, marker, _id) {
+    function makeInfoWindowEvent(map, infowindow,type, contentString, marker, _id) {
 
         google.maps.event.addListener(marker, 'click', function() {
             google.maps.event.addListener(infowindow, 'domready', function() {
 
-                // Reference to the DIV that wraps the bottom of infowindow
                 var iwOuter = $('.gm-style-iw');
-
-                /* Since this div is in a position prior to .gm-div style-iw.
-                 * We use jQuery and create a iwBackground variable,
-                 * and took advantage of the existing reference .gm-style-iw for the previous div with .prev().
-                */
                 var iwBackground = iwOuter.prev();
-
-                // Removes background shadow DIV
-                iwBackground.children(':nth-child(2)').css({'display' : 'none'});
-
-                // Removes white background DIV
-                iwBackground.children(':nth-child(4)').css({'background-color':'#f8fff7'});
-
+                iwBackground.children(':nth-child(3)').css({'box-shadow':'unset'});
+                switch(type) {
+                    case 0:
+                        iwBackground.children(':nth-child(3)').find('div').children().css({'background-color': '#fabb9b', 'z-index' : '1'});
+                        iwBackground.children(':nth-child(4)').css({'background-color':'#fabb9b'});
+                        break;
+                    case 1:
+                        iwBackground.children(':nth-child(4)').css({'background-color':'#41a6b9'});
+                        iwBackground.children(':nth-child(3)').find('div').children().css({'background-color': '#41a6b9', 'z-index' : '1'});
+                        break;
+                    case 2:
+                        iwBackground.children(':nth-child(3)').find('div').children().css({'background-color': '#7c79aa', 'z-index' : '1'});
+                        iwBackground.children(':nth-child(4)').css({'background-color':'#7c79aa'});
+                        break;
+                    case 3:
+                        iwBackground.children(':nth-child(3)').find('div').children().css({'background-color': '#d34a4a', 'z-index' : '1'});
+                        iwBackground.children(':nth-child(4)').css({'background-color':'#d34a4a'});
+                        break;
+                    case 4:
+                        iwBackground.children(':nth-child(3)').find('div').children().css({'background-color': '#71c286', 'z-index' : '1'});
+                        iwBackground.children(':nth-child(4)').css({'background-color':'#71c286'});
+                        break;
+                    default :
+                        iwBackground.children(':nth-child(3)').find('div').children().css({'background-color': '#f8fff7', 'z-index' : '1'});
+                        iwBackground.children(':nth-child(4)').css({'background-color':'#f8fff7'});
+                }
             });
             infowindow.setContent(contentString);
             infowindow.open(map, marker);

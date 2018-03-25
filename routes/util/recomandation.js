@@ -3,6 +3,8 @@
  */
 var UserProfile = require('../../models/userProfile.js');
 var Event = require('../../models/event.js');
+var Entity = require('../../models/entity.js');
+
 
 function compareByUserScore(a,b) {
     return a.userScore > b.userScore
@@ -147,8 +149,8 @@ function getNearEvents(userLocation, noOfResults, callback)
             for (var i = 0; i < events.length; i++) {
                 currentEvent = events[i];
                 currentEvent.loc = {
-                    lat: currentEvent.lat,
-                    lng: currentEvent.lng
+                    lat: events[i].entityLat,
+                    lng: events[i].entityLng
                 };
                 events[i].distanceToUser = computeDistance(userLocation, currentEvent.loc);
                 console.log("events[" + i+ "]=" + events[i].distanceToUser);
@@ -160,9 +162,31 @@ function getNearEvents(userLocation, noOfResults, callback)
 
 }
 
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = deg2rad(lon2-lon1);
+    var a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+    ;
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c; // Distance in km
+    return d;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI/180)
+}
+
 function computeDistance(loc1, loc2)
 {
-    return Math.sqrt((loc1.lat - loc2.lat)^2 + (loc1.lng - loc2.lng)^2);
+    console.log(loc1.lat + "    " + loc2.lat);
+    var f =getDistanceFromLatLonInKm(loc1.lat,loc1.lng, loc2.lat, loc2.lng);
+    console.log("distanta e:" + f);
+    return f;
+
 }
 
 module.exports.getNearEvents = getNearEvents;
