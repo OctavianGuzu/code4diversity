@@ -47,6 +47,7 @@ function getSuggestedEvents(user, noOfResults, callback) {
                         currentEvent = events[i];
                         events[i].userScore = computeProfilePredictionScore(userPreference, currentEvent);
                     }
+                        
 
                     events.sort(compareByUserScore);
                     callback(events.slice(1, noOfResults));
@@ -95,11 +96,8 @@ function getOthersLikedEvents(user, noOfResults, callback)
                             events = upComingEvents;
                             for (var i = 0; i < otherUsers.length; i++) {
                                 otherUsers[i].likeliness = computeLikelinessScore(userPreference, otherUsers[i]);
-                                allEvents = otherUsers[i].eventsWent.concat(
-                                    otherUsers[i].eventsInterested.concat(otherUsers[i].eventsGoing)
-                                );
                                 for (var j = 0; j < events.length; j++) {
-                                    partikip = allEvents.indexOf(events[j]) === -1 ? 0 : 1 ;
+                                    partikip = otherUsers[i].eventsInterested.indexOf(events[j]) === -1 ? 0 : 1 ;
                                     events[j].likeliness = otherUsers[i].likeliness * partikip;
                                 }
                             }
@@ -116,34 +114,18 @@ function getOthersLikedEvents(user, noOfResults, callback)
 
 function computeLikelinessScore(loggedUser, targetUser)
 {
-    var EV_WENT_FACTOR = 3;
-    var EV_GOING_FACTOR = 2;
     var EV_INTERESTED_FACTOR = 1;
 
     var likelinessScore = 0;
-    var events = loggedUser.eventsWent.concat(
-        loggedUser.eventsInterested.concat(loggedUser.eventsGoing)
-    );
-    for (var i=0; i<targetUser.eventsWent.length; i++) {
-        if (events.indexOf(targetUser.eventsWent[i]) !== -1) {
-            likelinessScore += EV_WENT_FACTOR;
-        }
-    }
-    for (i=0; i<targetUser.eventsGoing.length; i++) {
-        if (events.indexOf(targetUser.eventsGoing[i]) !== -1) {
-            likelinessScore += EV_GOING_FACTOR;
-        }
-    }
-    for (i=0; i<targetUser.eventsInterested.length; i++) {
+    var events = loggedUser.eventsInterested;
+
+    for (var i=0; i<targetUser.eventsInterested.length; i++) {
         if (events.indexOf(targetUser.eventsInterested[i]) !== -1) {
             likelinessScore += EV_INTERESTED_FACTOR;
         }
     }
 
-    var allTargetEvents = targetUser.eventsGoing.length +
-        targetUser.eventsWent.length +
-        targetUser.eventsInterested.length;
-    return likelinessScore / (allTargetEvents);
+    return likelinessScore / targetUser.eventsInterested.length;
 }
 
 /**
