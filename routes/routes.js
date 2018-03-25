@@ -96,7 +96,7 @@ router.post('/register', function (req, res, next) {
                     competeFactor : 1,
                     networkFactor : 1,
                     eventsInterested : [],
-                    userId : user._ids
+                    userId : user._id
                 };
                 UserProfile.create(objUserProfile, function (err, user) {
                     res.status(200).send(response);
@@ -163,21 +163,33 @@ router.get('/addInterest', function (req, res, next) {
         status_message : "success",
         data : false
     };
-    console.log(req.query);
+    //console.log(req.query);
 	var eventId = req.query.event;
 
     var userId = req.session.userId;
     UserProfile.getUserProfile(userId, function (userErr, userProfile) {
         if (userErr || !userProfile) {
-            res.redirect('/');
+            res.redirect('index');
         } else {
-        	console.log(userProfile);
-            UserProfile.update(
-                { _id:  userProfile._id},
-                { $push: { eventsInterested: eventId }}, function (err, response) {
-                console.log(err);
-                res.redirect('index');
-            });
+        	//console.log(userProfile);
+        	Event.findOne({_id: eventId}).exec(function (err, ev) {
+        		ev.dimensions = JSON.parse(ev.dimensions);
+        		console.log(ev.dimensions.learnFactor);
+        		UserProfile.update(
+	                { _id:  userProfile._id},
+	                { $push: { eventsInterested: eventId }, 
+	            	$inc: {
+	            		learnFactor: parseInt(ev.dimensions.learnFactor),
+	            		competeFactor: parseInt(ev.dimensions.competeFactor),
+	            		teachFactor: parseInt(ev.dimensions.teachFactor),
+	            		buildFactor: parseInt(ev.dimensions.buildFactor),
+	            		networkFactor: parseInt(ev.dimensions.networkFactor)
+	            	}}, function (err, response) {
+	                console.log(err);
+	                res.redirect('index');
+	            });
+        	})
+            
         }
     });
 

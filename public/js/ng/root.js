@@ -346,7 +346,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                     address: item.address,
                     contact: "0755434879",
                     description: item.description,
-                    women: item.femaleProc == null ? "48%" : item.femaleProc,
+                    women: item.femaleProc == null ? "50%" : item.femaleProc + "%",
                     rating: item.rating == 0 ? "4.5" : item.rating,
                     sentiment: "happy",
                     _id: item._id
@@ -363,12 +363,17 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     var i = 0;
     features.forEach(function(feature) {
         i = i + 1;
+        var femaleBadge = " ";
+        // console.log(feature.info.women);
+        if(feature.info.women.toString().localeCompare("45%")  ) {
+            // console.log(feature.info.women);
+            femaleBadge = "   <img src=\"medal.png\"  height=\"20\" width=\"15\"> </p>\n  ";
+        }
         var marker = new google.maps.Marker({
             position: feature.obj.position,
             title: feature.obj.description,
             icon: icons[feature.obj.type].icon,
         });
-
         // makeInfoWindowEvent(map, infowindow, "<div id=\"content\">\n" +
         makeInfoWindowEvent(marker, infowindow,  feature.obj.type,"<div id=\"content\">\n" +
             "  <div id=\"siteNotice\">\n" +
@@ -382,8 +387,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             "  <p class=\"text-dark\"><b><b>Address: <b><b>" + feature.info.address + "</b></p>\n" +
             "  <p class=\"text-dark\">Contact: " + feature.info.contact + "</p>\n" +
             "  <p class=\"text-dark\">Description: " + feature.info.description + "</p>\n" +
-            "  <p class=\"text-dark\">Women: " + feature.info.women +"</p>\n" +
-            "  <p class=\"text-dark\">Rating:"+ feature.info.rating +"</p>\n" +
+            "  <p class=\"text-dark\">Women: " + feature.info.women + "  " + femaleBadge +
+            "  <p class=\"text-dark\">Rating: "+ feature.info.rating +"</p>\n" +
             "  </div>\n" +
             "  <p class=\"text-dark\">Overall sentiment: " + feature.info.sentiment + "</b></b></p>\n"+
             " <a href=\"#\"  id=\"see-events\"  style=\"border:transparent ; background-color: transparent;\" ><img src=\"SeeEvents.png\"</a>", marker, feature.info._id);
@@ -439,7 +444,13 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             async: true,
             data: {},
             success: function (res){
-                var events = res;
+                var events;
+                if (res == null) {
+                    events = []
+                } else {
+                    events = res;
+                }
+                
                 $('suggestionBody2').empty();
                 $('suggestionBody2').append("<tr id=\"sssrow" + 0 + "\"></tr>");
                 for(var j = 0; j < events.length; j++) {
