@@ -1,6 +1,7 @@
 var root = angular.module("root", ['ngRoute']);
 var dash = angular.module("dash", ['ngRoute']);
 var globalUserName = "";
+var globalUserLocation = null;
 
 root.controller("loginController", ["$scope", "$http",function( $scope, $http ) {
 	$scope.invalid_user = false;
@@ -36,10 +37,6 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 	$('#registerAcc').click(function (e) {
 		window.location.href = '/register';
 	});
-
-    $('#suggestionBtn').click(function (e) {
-       /** TODO: sugestion modal*/
-    });
 
     $scope.registerAction = function(obj) {
         var data = obj;
@@ -214,6 +211,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 lng: position.coords.longitude
             };
             userLocation = pos;
+            globalUserLocation = pos;
             //infoWindow.setPosition(pos);
             //infoWindow.setContent('Location found.');
             //infoWindow.open(map);
@@ -304,6 +302,23 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         marker.setMap(map);
     });
 }
+
+    $('#suggestionBtn').click(function (e) {
+        var data = {
+            loc : globalUserLocation
+        };
+        $.ajax
+        ({
+            type: "GET",
+            url: "/getSuggestions",
+            dataType: 'json',
+            async: true,
+            data: data,
+            success: function (res){
+
+            }
+        });
+    });
 
     function makeInfoWindowEvent(map, infowindow, contentString, marker) {
 

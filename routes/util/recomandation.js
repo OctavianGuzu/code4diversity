@@ -149,36 +149,37 @@ function computeLikelinessScore(loggedUser, targetUser)
 /**
  * Returns the closest noOfResults events based on a maximum radius
  * @param userLocation
- * @param maxRadius
  * @param noOfResults
  * @param callback
  */
-function getNearEvents(userLocation, maxRadius, noOfResults, callback)
+function getNearEvents(userLocation, noOfResults, callback)
 {
     var events = null;
     Event.getAllUpcomingEvents(function(err, upComingEvents) {
         if (err || !events) {
-            return callback(err);
+            callback(err);
         } else {
             events = upComingEvents;
+            var currentEvent;
+            for (var i = 0; i < events.length; i++) {
+                currentEvent= events[i];
+                currentEvent.loc = {
+                    lat: currentEvent.lat,
+                    lng: currentEvent.lng
+                };
+                events[i].distanceToUser = computeDistance(userLocation, currentEvent.loc);
+            }
+
+            events.sort(compareByDistance);
+            callback(events.slice(1, noOfResults));
         }
     });
 
-    var currentEvent;
-    for (var i = 0; i < events.length; i++) {
-        currentEvent= events[i];
-        currentEvent.loc = {
-           lat: currentEvent.lat,
-           long: currentEvent.long
-        };
-        events[i].distanceToUser = computeDistance(userLocation, currentEvent.loc);
-    }
-
-    events.sort(compareByDistance);
-    callback(events.slice(1, noOfResults));
 }
 
 function computeDistance(loc1, loc2)
 {
-    return Math.sqrt((loc1.lat - loc2.lat)^2 + (loc1.long - loc2.long)^2);
+    return Math.sqrt((loc1.lat - loc2.lat)^2 + (loc1.lng - loc2.lng)^2);
 }
+
+module.exports.getNearEvents = getNearEvents;

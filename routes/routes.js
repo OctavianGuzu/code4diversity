@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Entity = require('../models/entity');
 var Event = require('../models/event');
+var recommender = require('../routes/util/recomandation');
 var https = require('https');
 
 // GET route for reading data
@@ -36,7 +37,14 @@ router.post('/', function (req, res, next) {
 
 router.get('/register', function (req, res, next) {
 	res.render('register');
-});	
+});
+
+router.get('/getSuggestions', function (req, res, next) {
+    console.log(req.query.loc);
+    var events = recommender.getNearEvents(req.query.loc, 3, function(events) {
+        res.json(events);
+	});
+});
 
 router.post('/register', function (req, res, next) {
 	var obj;
