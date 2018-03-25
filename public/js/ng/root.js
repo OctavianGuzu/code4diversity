@@ -105,6 +105,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     $scope.populateLocs = function () {
          var picker = $("#locPicker");
         //don't forget error handling!
+        picker.empty();
         
         $http.get('/getEntities').then( function (result) {
              $scope.entities = result.data;
@@ -281,7 +282,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 description: item.description,
                 women: item.femaleProc == null ? "48%" : item.femaleProc,
                 rating: item.rating == 0 ? "4.5" : item.rating,
-                sentiment: "happy"
+                sentiment: "happy",
+                _id: item._id
             }
         }
         $scope.new_features.push(big_obj);
@@ -315,8 +317,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             "  <p class=\"text-dark\">Women: " + feature.info.women +"</p>\n" +
             "  <p class=\"text-dark\">Rating:"+ feature.info.rating +"</p>\n" +
             "  </div>\n" +
-            "  <p class=\"text-dark\">Overall sentiment:" + feature.info.sentiment + "</p>\n"+
-            " <button id=\"close-image\" class=\"button\"  style=\"border:transparent ; background-color: transparent;\" ><img src=\"SeeEvents.png\"</button>", marker);
+            "  <p class=\"text-dark\">Overall sentiment: " + feature.info.sentiment + "</p>\n"+
+            " <a href=\"#\"  id=\"see-events\"  style=\"border:transparent ; background-color: transparent;\" ><img src=\"SeeEvents.png\"</a>", marker, feature.info._id);
         //<button style="border:1px solid black; background-color: transparent;">Test</button>
         marker.setMap($scope.map);
     });
@@ -340,7 +342,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         });
     });
 
-    function makeInfoWindowEvent(map, infowindow, contentString, marker) {
+    function makeInfoWindowEvent(map, infowindow, contentString, marker, _id) {
 
         google.maps.event.addListener(marker, 'click', function() {
             google.maps.event.addListener(infowindow, 'domready', function() {
@@ -363,7 +365,26 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             });
             infowindow.setContent(contentString);
             infowindow.open(map, marker);
+            $('#see-events').click(function (e) {
 
+                $http.get('getEvents').then(function (result) {
+                    var events = result.data;
+                    var my_events = [];
+                    events.forEach(function (event) {
+                        if (event.entityId == _id)
+                            my_events.push(event);
+                    })
+                    console.log(my_events);
+                    $('#eventBody').empty();
+                    $('#eventBody').append("<tr id=\"row" + 0 + "\"></tr>");
+                    for(var j = 0; j < my_events.length; j++) {
+                        $('#row' + j).html("<td>" + my_events[j].name + "</td><td>"+ my_events[j].description +"</td>");
+                        $('#eventBody').append("<tr id=\"row" + (j + 1) + "\"></tr>");
+                    }
+
+                    $('#EventsShow').modal('show'); 
+                })
+            })
         });
 }
 

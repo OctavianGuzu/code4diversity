@@ -340,6 +340,36 @@
       </div>
     </div>
 
+    <div class="modal fade" id="EventsShow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="showEventsTitle">Events</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="eventBody">
+                <tr id="row0"></tr>
+              </tbody>
+            </table>
+          </div>
+        
+          <div class="modal-footer">
+            <button id="EventInsertBtn" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

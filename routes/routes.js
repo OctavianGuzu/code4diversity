@@ -120,6 +120,12 @@ router.get('/getEntities', function (req, res, next) {
 	})
 })
 
+router.get('/getEvents', function (req, res, next) {
+	Event.find({}).exec(function (err, result) {
+		res.json(result);
+	})
+})
+
 router.get('/addEvent', function (req, res, next) {
 	var response = {
 		status_code : 0,
@@ -159,7 +165,7 @@ router.get('/addEntity', function (req, res, next) {
 		type = 0;
 	else if (req.query.type == "University")
 		type = 1;
-	else if (req.query.type = "Public club")
+	else if (req.query.type == "Public club")
 		type = 2;
 	else if (req.query.type == "Private club")
 		type = 3;
