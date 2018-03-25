@@ -74,9 +74,18 @@
         <li class="nav-item">
           <form class="form-inline my-2 my-lg-0 mr-lg-2">
             <div class="input-group">
-              <input class="form-control" type="text" placeholder="Search for...">
+              <!-- <input class="form-control" type="text" placeholder="Search for..."> -->
+              <select class="selectpicker" id="selectSearch">
+                <option>All</option>
+                <option>Highschool</option>
+                <option>University</option>
+                <option>Public Club</option>
+                <option>Private Club</option>
+                <option>Company</option>
+              </select>
+
               <span class="input-group-btn">
-                <button class="btn btn-primary" type="button">
+                <button class="btn btn-primary" type="button" id="searchbtn">
                   <i class="fa fa-search"></i>
                 </button>
               </span>

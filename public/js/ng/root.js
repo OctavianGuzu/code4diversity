@@ -94,7 +94,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     $scope.entities = null;
     $(document).ready(function () {
 
-        $scope.populateLocs();
+        $scope.populateLocs(-1);
 
         $http.get('/getUserName').then(function (result) {
             $('#titleBox').text("RoboMap 🤖   " + result.data);
@@ -102,7 +102,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
        
     })
 
-    $scope.populateLocs = function () {
+    $scope.populateLocs = function (type_opt) {
          var picker = $("#locPicker");
         //don't forget error handling!
         picker.empty();
@@ -111,9 +111,10 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
              $scope.entities = result.data;
             result.data.forEach( function(item) {
                 //console.log(item);
-                picker.append("<option>" + item.name +  "</option>");
+                if (item.type == type_opt || type_opt == -1)
+                    picker.append("<option>" + item.name +  "</option>");
             });
-            $scope.initMap();
+            $scope.initMap(type_opt);
         });
 
         
@@ -174,6 +175,26 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         }
     })
 
+    $('#searchbtn').click(function (e) {
+        var type_value = $('#selectSearch').val();
+
+        var type;
+        if (type_value == "Highschool")
+            type = 0;
+        else if (type_value == "University")
+            type = 1;
+        else if (type_value == "Public Club")
+            type = 2;
+        else if (type_value == "Private Club")
+            type = 3;
+        else if (type_value == "Company")
+            type = 4;
+        else if (type_value == "All")
+            type = -1;
+         $scope.populateLocs(type);
+        })
+
+
 
     $('#EntityInsertBtn').click(function (e) {
         $scope.insertSucc = false;
@@ -200,7 +221,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             $http.get(url)
                 .then(function (response) {
                    // google.maps.event.trigger($scope.map, 'resize');
-                    $scope.populateLocs();
+                    $scope.populateLocs(-1);
                     $scope.insertSucc = true;
                     $scope.insertFail = false;
                 });         
@@ -211,20 +232,21 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         }
     })
 
-    $scope.initMap = function() {
+    $scope.initMap = function(type_opt) {
 
     // Latlng for map center
     var myLatlng = new google.maps.LatLng(44.4267674, 28.102538399999958);
 
     var mapOptions = {
-        zoom: 10,
+        zoom: 8,
         center: myLatlng,
         styles: black_map_style
     };
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
     console.log("Map init");
-   // infoWindow = new google.maps.InfoWindow;
+    // var infowindow;
+    // infoWindow = new google.maps.InfoWindow;
 
     // Try HTML5 geolocation.
     if (navigator.geolocation) {
@@ -235,9 +257,9 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             };
             userLocation = pos;
             globalUserLocation = pos;
-            //infoWindow.setPosition(pos);
-            //infoWindow.setContent('Location found.');
-            //infoWindow.open(map);
+            // infoWindow.setPosition(pos);
+            // infoWindow.setContent('Location found.');
+            // infoWindow.open(map);
             $scope.map.setCenter(pos);
         }, function() {
             handleLocationError(true, infoWindow, $scope.map.getCenter());
@@ -267,26 +289,28 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
 
     $scope.new_features = [];
     $scope.entities.forEach(function (item) {
-        var obj = {
-            position: new google.maps.LatLng(item.lat, item.long),
-            type: item.type,
-            description: item.description
-        };
-        var big_obj = {
-            obj: obj,
-            info: {
-                name: item.name,
-                img: item.imageUrl != "" ? item.imageUrl : "http://img.alibaba.com/photo/10888445/Radio_Controlled_Robosapien_Style_Robot_Toy_Roboactor.jpg",
-                address: item.address,
-                contact: "0755434879",
-                description: item.description,
-                women: item.femaleProc == null ? "48%" : item.femaleProc,
-                rating: item.rating == 0 ? "4.5" : item.rating,
-                sentiment: "happy",
-                _id: item._id
+        if (item.type == type_opt || type_opt == -1) {
+            var obj = {
+                position: new google.maps.LatLng(item.lat, item.long),
+                type: item.type,
+                description: item.description
+            };
+            var big_obj = {
+                obj: obj,
+                info: {
+                    name: item.name,
+                    img: item.imageUrl != "" ? item.imageUrl : "http://img.alibaba.com/photo/10888445/Radio_Controlled_Robosapien_Style_Robot_Toy_Roboactor.jpg",
+                    address: item.address,
+                    contact: "0755434879",
+                    description: item.description,
+                    women: item.femaleProc == null ? "48%" : item.femaleProc,
+                    rating: item.rating == 0 ? "4.5" : item.rating,
+                    sentiment: "happy",
+                    _id: item._id
+                }
             }
+            $scope.new_features.push(big_obj);
         }
-        $scope.new_features.push(big_obj);
     })
 
     var features = $scope.new_features;
