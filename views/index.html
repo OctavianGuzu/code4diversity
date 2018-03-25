@@ -269,44 +269,105 @@
       </div>
     </div>
 
-  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Some cool events</h5>
+          <h5 class="modal-title" id="showEventsTitle">Some cool events</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
         <div class="modal-body">
-          <table class="table table-striped">
-            <thead>
-            <tr>
-            </tr>
-            </thead>
-              <tr><th rowspan="2" align="right">Events Near By</th></tr>
-            <tbody id="suggestionBody">
-            <tr id="srow0"></tr>
-            </tbody>
-            <tr><th rowspan="2" align="right">Events you may like</th></tr>
-            <tbody id="suggestionBody1">
-            <tr id="ssrow0"></tr>
-            </tbody>
-            <tr><th rowspan="2" align="right">Events other people liked</th></tr>
-            <tbody id="suggestionBody2">
-            <tr id="sssrow0"></tr>
-            </tbody>
-          </table>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Events near by</label>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+              </thead>
+              <tbody id="suggestionBody">
+              <tr id="srow0"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Events that you may like</label>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+              </thead>
+              <tbody id="suggestionBody1">
+              <tr id="ssrow0"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Other people also liked</label>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+              </thead>
+              <tbody id="suggestionBody2">
+              <tr id="sssrow0"></tr>
+              </tbody>
+            </table>
+          </div>
         </div>
+
         <div class="modal-footer">
-          <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
-          <p class="text-danger" ng-show="insertFail">Don't leave fields empty!</p>
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <button id="EntityInsertBtn" type="button" class="btn btn-primary">Done</button>
+          <button id="EventInsertBtn" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
         </div>
       </div>
     </div>
   </div>
+
+  <!--<div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-hidden="true">-->
+    <!--<div class="modal-dialog" role="document">-->
+      <!--<div class="modal-content">-->
+        <!--<div class="modal-header">-->
+          <!--<h5 class="modal-title" id="exampleModalLabel">Some cool events</h5>-->
+          <!--<button class="close" type="button" data-dismiss="modal" aria-label="Close">-->
+            <!--<span aria-hidden="true">×</span>-->
+          <!--</button>-->
+        <!--</div>-->
+        <!--<div class="modal-body">-->
+          <!--<table class="table table-striped">-->
+            <!--<thead>-->
+            <!--<tr>-->
+            <!--</tr>-->
+            <!--</thead>-->
+              <!--<tr><th rowspan="2" align="right">Events Near By</th></tr>-->
+            <!--<tbody id="suggestionBody">-->
+            <!--<tr id="srow0"></tr>-->
+            <!--</tbody>-->
+            <!--<tr><th rowspan="2" align="right">Events you may like</th></tr>-->
+            <!--<tbody id="suggestionBody1">-->
+            <!--<tr id="ssrow0"></tr>-->
+            <!--</tbody>-->
+            <!--<tr><th rowspan="2" align="right">Events other people liked</th></tr>-->
+            <!--<tbody id="suggestionBody2">-->
+            <!--<tr id="sssrow0"></tr>-->
+            <!--</tbody>-->
+          <!--</table>-->
+        <!--</div>-->
+        <!--<div class="modal-footer">-->
+          <!--<p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>-->
+          <!--<p class="text-danger" ng-show="insertFail">Don't leave fields empty!</p>-->
+          <!--<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>-->
+          <!--<button id="EntityInsertBtn" type="button" class="btn btn-primary">Done</button>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 
     <div class="modal fade" id="EventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
