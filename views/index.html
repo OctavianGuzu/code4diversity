@@ -31,32 +31,32 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Map">
           <a class="nav-link" href="#">
             <i class="fa fa-fw fa-map-o"></i>
             <span class="nav-link-text">Map</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
+        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Add Entity">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#EntityModal" id="addOption">
             <i class="fa fa-fw fa-map-pin"></i>
             <span class="nav-link-text">Add entity</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
+        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Add Event">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#EventModal" id="addEventOption">
             <i class="fa fa-fw fa-calendar-plus-o"></i>
             <span class="nav-link-text">Add event</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
+        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="suggestions">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#SuggestionModal">
             <i class="fa fa-fw fa-calendar"></i>
             <span class="nav-link-text" id="suggestionBtn">Event suggestions</span>
           </a>
         </li>
-        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
-          <a class="nav-link" href="#">
+        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Requests" ng-show="is_admin">
+          <a class="nav-link" href="#" id="viewRequests">
             <i class="fa fa-fw fa-clock-o"></i>
             <span class="nav-link-text">Requests</span>
           </a>
@@ -388,6 +388,55 @@
                 <tr id="row0"></tr>
               </tbody>
             </table>
+          </div>
+        
+          <div class="modal-footer">
+            <button id="EventInsertBtn" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="RequestsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="showEventsTitle">Requests (Click on one to approve it)</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Entities</label>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reqEntBody">
+                <tr id="rowEn0"></tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Events</label>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reqEventBody">
+                <tr id="rowEnv0"></tr>
+              </tbody>
+            </table>
+            </div>  
           </div>
         
           <div class="modal-footer">

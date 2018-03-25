@@ -92,7 +92,17 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 
 dash.controller("dashboardController", ["$scope", "$http", function( $scope, $http ) {
     $scope.entities = null;
+    $scope.is_admin = false;
     $(document).ready(function () {
+
+        $http.get('/isAdmin').then(function (res) {
+            var isAdmin = res.data;
+            if (isAdmin) {
+                $scope.is_admin = true;
+            } else {
+                $scope.is_admin = false;
+            }
+        })
 
         $scope.populateLocs(-1);
 
@@ -110,7 +120,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
              $scope.entities = result.data;
             result.data.forEach( function(item) {
                 //console.log(item);
-                if (item.type == type_opt || type_opt == -1)
+                if ((item.type == type_opt || type_opt == -1) && item.status)
                     picker.append("<option>" + item.name +  "</option>");
             });
             $scope.initMap(type_opt);
@@ -131,6 +141,33 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 $scope.insertSucc2 = false;
                 $scope.insertFail2 = false;
             })
+    })
+
+    $('#viewRequests').click(function (e) {
+        $http.get('/getPending').then(function (result) {
+            var entities = result.data.entities;
+            var events = result.data.events;
+            $('#reqEntBody').empty();
+            $('#reqEntBody').append("<tr id=\"rowEn" + 0 + "\"></tr>");
+            for(var j = 0; j < entities.length; j++) {
+                $('#rowEn' + j).html("<td>" + entities[j].name + "</td><td>"+ entities[j].description +"</td>" +
+                                    "<td><a"+ " href=/approveEntity?_id=" + entities[j]._id +">" + "Approve" + "</a></td>");
+                $('#reqEntBody').append("<tr id=\"rowEn" + (j + 1) + "\"></tr>");
+            }
+
+            $('#reqEventBody').empty();
+            $('#reqEventBody').append("<tr id=\"rowEnv" + 0 + "\"></tr>");
+            for(var j = 0; j < events.length; j++) {
+                $('#rowEnv' + j).html("<td>" + events[j].name + "</td><td>"+ events[j].description +"</td>" +
+                                    "<td><a"+ " href=/approveEvent?_id=" + events[j]._id +">" + "Approve" + "</a></td>");
+                $('#reqEventBody').append("<tr id=\"rowEnv" + (j + 1) + "\"></tr>");
+            }
+
+            $('#RequestsModal').modal('show');
+        })
+
+
+
     })
 
     $('#EventInsertBtn').click(function (e) {
@@ -246,7 +283,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     };
 
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
-    console.log("Map init");
+    //console.log("Map init");
     // var infowindow;
     // infoWindow = new google.maps.InfoWindow;
 
@@ -291,7 +328,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
 
     $scope.new_features = [];
     $scope.entities.forEach(function (item) {
-        if (item.type == type_opt || type_opt == -1) {
+        if ((item.type == type_opt || type_opt == -1) && item.status) {
             var obj = {
                 position: new google.maps.LatLng(item.lat, item.long),
                 type: item.type,
@@ -447,11 +484,12 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                     $('#eventBody').append("<tr id=\"row" + 0 + "\"></tr>");
                     var quickUrl;
                     for(var j = 0; j < my_events.length; j++) {
-
-                         quickUrl = "/addInterest?event="  + my_events[j]._id;
-                        $('#row' + j).html("<td>" + my_events[j].name + "</td><td>"
-                            + my_events[j].description +'</td><td ><a href="' + quickUrl +  '">Interested</a></td>td>');
-                        $('#eventBody').append("<tr id=\"row" + (j + 1) + "\"></tr>");
+                        if (my_events[j].status) {
+                            quickUrl = "/addInterest?event="  + my_events[j]._id;
+                            $('#row' + j).html("<td>" + my_events[j].name + "</td><td>"
+                                + my_events[j].description +'</td><td ><a href="' + quickUrl +  '">Interested</a></td>td>');
+                            $('#eventBody').append("<tr id=\"row" + (j + 1) + "\"></tr>");
+                        }
                     }
 
                     $('#EventsShow').modal('show'); 
