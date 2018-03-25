@@ -24,12 +24,10 @@ var EntitySchema = new mongoose.Schema({
     },
     femaleProc: {
         type: Number,
-        required: true,
         trim: true
     },
     imageUrl: {
         type: String,
-        required: true,
         trim: true
     },
     address: {

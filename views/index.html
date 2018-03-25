@@ -38,13 +38,13 @@
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Charts">
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#EntityModal">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EntityModal" id="addOption">
             <i class="fa fa-fw fa-map-pin"></i>
             <span class="nav-link-text">Add entity</span>
           </a>
         </li>
         <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="Tables">
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#EventModal">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EventModal" id="addEventOption">
             <i class="fa fa-fw fa-calendar-plus-o"></i>
             <span class="nav-link-text">Add event</span>
           </a>
@@ -254,7 +254,7 @@
             <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
             <p class="text-danger" ng-show="insertFail">Don't leave fields empty!</p>
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button id="EntityInsertBtn" type="button" class="btn btn-primary">Done</button>
+            <button id="EntityInsertBtn" type="button" class="btn btn-primary" >Done</button>
           </div>
         </div>
       </div>

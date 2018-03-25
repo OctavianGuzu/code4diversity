@@ -99,8 +99,6 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         $http.get('/getUserName').then(function (result) {
             $('#titleBox').text("RoboMap 🤖   " + result.data);
         })
-
-        $scope.initMap();
        
     })
 
@@ -114,10 +112,25 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 //console.log(item);
                 picker.append("<option>" + item.name +  "</option>");
             });
+            $scope.initMap();
         });
 
         
     }
+
+    $('#addOption').click(function (e) {
+        $scope.$apply(function () {
+                $scope.insertSucc = false;
+                $scope.insertFail = false;
+            })
+    })
+
+    $('#addEventOption').click(function (e) {
+        $scope.$apply(function () {
+                $scope.insertSucc2 = false;
+                $scope.insertFail2 = false;
+            })
+    })
 
     $('#EventInsertBtn').click(function (e) {
         $scope.insertSucc2 = false;
@@ -177,7 +190,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                     "&femper=" + femPer;
             $http.get(url)
                 .then(function (response) {
-                    console.log("here");
+                   // google.maps.event.trigger($scope.map, 'resize');
+                    $scope.populateLocs();
                     $scope.insertSucc = true;
                     $scope.insertFail = false;
                 });         
@@ -194,12 +208,12 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     var myLatlng = new google.maps.LatLng(44.4267674, 28.102538399999958);
 
     var mapOptions = {
-        zoom: 6,
+        zoom: 10,
         center: myLatlng,
         styles: black_map_style
     };
 
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
     console.log("Map init");
    // infoWindow = new google.maps.InfoWindow;
 
@@ -215,13 +229,13 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             //infoWindow.setPosition(pos);
             //infoWindow.setContent('Location found.');
             //infoWindow.open(map);
-            map.setCenter(pos);
+            $scope.map.setCenter(pos);
         }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+            handleLocationError(true, infoWindow, $scope.map.getCenter());
         });
     } else {
         // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
+        handleLocationError(false, infoWindow, $scope.map.getCenter());
     }
 
     var icons = {
@@ -242,32 +256,30 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         }
     };
 
-    var features = [
-        {
-            position: new google.maps.LatLng(45.6579755,25.601197700000057),
-            type: 1,
-            description:'University'
-        }, {
-            position : new google.maps.LatLng(45.4353208, 28.007994499999995),
-            type: 0,
-            description:'High School'
-        },
-        {
-            position : new google.maps.LatLng(47.1584549, 27.601441799999975),
-            type:2,
-            description:'Public Robotics Club'
-        },
-        {
-            position : new google.maps.LatLng(44.8564798, 24.8691824),
-            type:3,
-            description:'Private Robotics Club'
-        },
-        {
-            position : new google.maps.LatLng(44.43272, 25.986659400000008),
-            type:4,
-            description:'Company'
+    $scope.new_features = [];
+    $scope.entities.forEach(function (item) {
+        var obj = {
+            position: new google.maps.LatLng(item.lat, item.long),
+            type: item.type,
+            description: item.description
+        };
+        var big_obj = {
+            obj: obj,
+            info: {
+                name: item.name,
+                img: item.imageUrl != "" ? item.imageUrl : "http://img.alibaba.com/photo/10888445/Radio_Controlled_Robosapien_Style_Robot_Toy_Roboactor.jpg",
+                address: item.address,
+                contact: "0755434879",
+                description: item.description,
+                women: item.femaleProc == null ? "48%" : item.femaleProc,
+                rating: item.rating == 0 ? "4.5" : item.rating,
+                sentiment: "happy"
+            }
         }
-    ];
+        $scope.new_features.push(big_obj);
+    })
+
+    var features = $scope.new_features;
 
     var markers;
     var infowindow = new google.maps.InfoWindow();
@@ -275,31 +287,30 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     features.forEach(function(feature) {
         i = i + 1;
         var marker = new google.maps.Marker({
-            position: feature.position,
-            title: feature.description,
-            icon: icons[feature.type].icon,
+            position: feature.obj.position,
+            title: feature.obj.description,
+            icon: icons[feature.obj.type].icon,
         });
 
         // makeInfoWindowEvent(map, infowindow, "<div id=\"content\">\n" +
         makeInfoWindowEvent(marker, infowindow, "<div id=\"content\">\n" +
             "  <div id=\"siteNotice\">\n" +
             "  </div>\n" +
-            '<h4 id="firstHeading" class="firstHeading">Accenture</h4>'+
+            "<h4 id=\"firstHeading\" class=\"firstHeading\">" + feature.info.name + "</h4>"+
             "  <div id=\"bodyContent\">\n" +
             //" <div class=\"p-3 mb-2 bg-dark text-white\">Accenture</div>\n"+
-            "  <img src=\"header.jpg\" class=\"centerImage\" height=\"100\" width=\"150\">\n" +
+            "  <img src=" + feature.info.img + " class=\"centerImage\" height=\"100\" width=\"150\">\n" +
             "  </div>\n" +
-            "  <p class=\"text-dark\">insert adress here</p>\n" +
-            "  <p class=\"text-dark\">insert contact details here</p>\n" +
-            "  <p class=\"text-dark\">insert description here</p>\n" +
-            "  <p class=\"text-dark\">insert % of women here</p>\n" +
-            "  <p class=\"text-dark\">insert rating here</p>\n" +
-            "  <p class=\"text-dark\">insert top3 feedback here</p>\n" +
+            "  <p class=\"text-dark\">Address: " + feature.info.address + "</p>\n" +
+            "  <p class=\"text-dark\">Contact: " + feature.info.contact + "</p>\n" +
+            "  <p class=\"text-dark\">Description: " + feature.info.description + "</p>\n" +
+            "  <p class=\"text-dark\">Women: " + feature.info.women +"</p>\n" +
+            "  <p class=\"text-dark\">Rating:"+ feature.info.rating +"</p>\n" +
             "  </div>\n" +
-            "  <p class=\"text-dark\">insert overall sentiment :) here</p>\n"+
+            "  <p class=\"text-dark\">Overall sentiment:" + feature.info.sentiment + "</p>\n"+
             " <button id=\"close-image\" class=\"button\"  style=\"border:transparent ; background-color: transparent;\" ><img src=\"SeeEvents.png\"</button>", marker);
         //<button style="border:1px solid black; background-color: transparent;">Test</button>
-        marker.setMap(map);
+        marker.setMap($scope.map);
     });
 }
 
