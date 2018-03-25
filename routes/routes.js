@@ -131,7 +131,7 @@ router.get('/addEvent', function (req, res, next) {
 		entityId: req.query.entityId,
 		name: req.query.name,
 		description: req.query.description,
-		dimensions: null,
+		dimensions: req.query.dimensions,
 		status: false
 	};
 

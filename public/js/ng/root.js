@@ -140,6 +140,13 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         var name = $('#NameEvent').val();
         var entity = $('#locPicker').val();
         var desc = $('#DescEvent').val();
+        var dimensions = {
+            learnFactor : $('#dimLearnEvent').val(),
+            buildFactor: $('#dimBuildEvent').val(),
+            competeFactor: $('#dimCompeteEvent').val(),
+            teachFactor: $('#dimTeachEvent').val(),
+            networkFactor: $('#dimNetworkEvent').val()
+        };
 
         if (name != "" && entity != "" && desc != "") {
             var entityId;
@@ -150,8 +157,9 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             
             var url_here = "/addEvent?name=" + name +
                 "&entityId=" + entityId +
-                "&description=" + desc;
-
+                "&description=" + desc +
+                "&dimensions=" + JSON.stringify(dimensions);
+            console.log(url_here);
             $http.get(url_here)
                 .then(function (response) {
                     $scope.insertSucc2 = true;
@@ -326,7 +334,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             async: true,
             data: data,
             success: function (res){
-
+                console.log(res);
+                console.log("done");
             }
         });
     });
